@@ -9,6 +9,9 @@ on:
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./dev-sentinels7-auth-service
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
