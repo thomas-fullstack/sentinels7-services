@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./dev-sentinels7-auth-service
+        working-directory: ./dev-sentinels7-auth-service/DevSentinels7AuthFunction
     steps:
     - uses: actions/checkout@master
     - name: Deploy code to Lambda
