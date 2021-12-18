@@ -1,0 +1,683 @@
+{
+  "holding_registers": [
+      {
+          "address": 99999,
+          "name": "cellular_career",
+          "unit": "",
+          "alias": "Cellular Carrier",
+          "factor": 1.0,
+          "operand": "multiply",
+          "enum": [{"original_value": 0, "display_value": "T-Mobile"}, {"original_value": 1, "display_value": "AT&T"}, {"original_value": 2, "display_value": "Verizon"}, {"original_value": 3, "display_value": "AT&T"}, {"original_value": 4, "display_value": "T-Mobile"}, {"original_value": -999, "display_value": "Unknown Operator"}]
+      },{
+          "address": 99999,
+          "name": "cellular_signal_strength",
+          "unit": "",
+          "alias": "Signal Strength",
+          "factor": 1.0,
+          "operand": "multiply"
+      },{
+          "address": 99999,
+          "name": "gps_lat",
+          "unit": "",
+          "alias": "GPS Latitude",
+          "factor": 0.000001,
+          "operand": "multiply"
+       },
+       {
+          "address": 99999,
+          "name": "gps_lon",
+          "unit": "",
+          "alias": "GPS Longitude",
+          "factor": 0.000001,
+          "operand": "multiply"
+       },
+      {
+          "address": 99999,
+          "name": "cpu_temp_deg_c",
+          "unit": "C",
+          "alias": "CPU Temperature",
+          "factor": 0.001,
+          "operand": "multiply"
+       },
+        {
+          "address": 99999,
+          "name": "cpu_usage_percent",
+          "unit": "%",
+          "alias": "CPU Usage",
+          "factor": 0.1,
+          "operand": "multiply"
+        },
+        {
+          "address": 99999,
+          "name": "ram_usage_percent",
+          "unit": "%",
+          "alias": "RAM Usage",
+          "factor": 0.1,
+          "operand": "multiply"
+        },
+        {
+          "address": 40002,
+          "name": "percent_load",
+          "unit": "%",
+          "alias": "Engine Load",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 40003,
+          "name": "actual_engine_percent_torque",
+          "unit": "%",
+          "alias": "Actual Engine Torque",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 40004,
+          "name": "engine_speed",
+          "unit": "RPM",
+          "alias": "Engine Speed",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "addresses": [40009, 40010],
+          "name": ["total_engine_hours_lsb", "total_engine_hours_msb"],
+          "unit": "Hrs",
+          "alias": "Engine Hours",
+          "factor": 1.0,
+          "operand": "multiply",
+          "combine_operation": "add"
+        },
+        {
+          "address": 40015,
+          "name": "engine_coolant_temperature",
+          "unit": "F",
+          "alias": "Engine Coolant Temp",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 40017,
+          "name": "engine_oil_temperature",
+          "unit": "F",
+          "alias": "Engine Oil Temp",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 40019,
+          "name": "fuel_delivery_pressure",
+          "unit": "psi",
+          "alias": "Fuel Delivery Pressure",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 40021,
+          "name": "engine_oil_pressure",
+          "unit": "psi",
+          "alias": "Engine Oil Pressure",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 40023,
+          "name": "coolant_level",
+          "unit": "%",
+          "alias": "Engine Coolant Level",
+          "factor": 0.01,
+          "operand": "multiply"
+        },
+        {
+          "address": 40025,
+          "name": "fuel_rate",
+          "unit": "Gal/Hour",
+          "alias": "Fuel Rate",
+          "factor": 0.1,
+          "operand": "multiply"
+        },
+        {
+          "address": 40029,
+          "name": "air_inlet_temperature",
+          "unit": "F",
+          "alias": "Intake Air Temp",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 40030,
+          "name": "boost_pressure",
+          "unit": "psi",
+          "alias": "Boost Pressure",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 40034,
+          "name": "alternator_potential_voltage",
+          "unit": "V",
+          "alias": "Alternator Voltage",
+          "factor": 0.1,
+          "operand": "multiply"
+        },
+        {
+          "address": 40035,
+          "name": "electrical_potential_voltage",
+          "unit": "V",
+          "alias": "Voltage",
+          "factor": 0.1,
+          "operand": "multiply"
+        },
+        {
+          "address": 40036,
+          "name": "battery_potential_voltage",
+          "unit": "V",
+          "alias": "Battery Voltage",
+          "factor": 0.1,
+          "operand": "multiply"
+        },
+        {
+          "address": 40039,
+          "name": "injector_metering_rail_1_pressure",
+          "unit": "psi",
+          "alias": "Fuel Rail Pressure Bank 1",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 40040,
+          "name": "injector_metering_rail_2_pressure",
+          "unit": "psi",
+          "alias": "Fuel Rail Pressure Bank 2",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 40069,
+          "name": "fuel_level",
+          "unit": "%",
+          "alias": "Fuel Level",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 40073,
+          "name": "short_term_fuel_trim_bank_1",
+          "unit": "%",
+          "alias": "Short Term Fuel Trim Bank 1",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 40079,
+          "name": "inlet_suction_pressure",
+          "unit": "psi",
+          "alias": "Intake Pressure",
+          "factor": 0.1,
+          "operand": "multiply"
+        },
+        {
+          "address": 40080,
+          "name": "outlet_discharge_pressure",
+          "unit": "psi",
+          "alias": "Outlet Pressure 1",
+          "factor": 0.1,
+          "operand": "multiply"
+        },
+        {
+          "address": 40081,
+          "name": "flow_rate",
+          "unit": "Gal/Min",
+          "alias": "Flow Rate",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 40082,
+          "name": "superpump_level_control",
+          "unit": "inches",
+          "alias": "Superpump Level Control",
+          "factor": 0.1,
+          "operand": "multiply"
+        },
+        {
+          "address": 40083,
+          "name": "superpump_pressure_control",
+          "unit": "psi",
+          "alias": "Superpump Pressure Control",
+          "factor": 0.1,
+          "operand": "multiply"
+        },
+        {
+          "address": 40084,
+          "name": "key_position",
+          "unit": "",
+          "alias": "Key Position",
+          "factor": 1.0,
+          "operand": "multiply",
+          "enum": [{"original_value": 0, "display_value": "Key in Manual"}, {"original_value": 1, "display_value": "Key in Auto"}, {"original_value": 2, "display_value": "Key Off"}]
+        },
+        {
+          "address": 40085,
+          "name": "flow_rate_sender",
+          "unit": "BBL/Min",
+          "alias": "Flow Rate Sender",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 40086,
+          "name": "water_temperature_sender",
+          "unit": "F",
+          "alias": "Water Temp Sender",
+          "factor": 0.1,
+          "operand": "multiply"
+        },
+        {
+          "addresses": [40087, 40088],
+          "name": ["flow_rate_total_lsb", "flow_rate_total_msb"],
+          "unit": "Gal",
+          "alias": "Flow Rate Total",
+          "factor": 1.0,
+          "operand": "multiply",
+          "combine_operation": "add"
+        },
+        {
+          "address": 40503,
+          "name": "digital_input_1_state",
+          "unit": "",
+          "alias": "Digital Input 1",
+          "factor": 1.0,
+          "operand": "multiply",
+          "enum": [{"original_value": 0, "display_value": "Off"}, {"original_value": 1, "display_value": "On"}]
+        },
+        {
+          "address": 40504,
+          "name": "digital_input_2_state",
+          "unit": "",
+          "alias": "Digital Input 2",
+          "factor": 1.0,
+          "operand": "multiply",
+          "enum": [{"original_value": 0, "display_value": "Off"}, {"original_value": 1, "display_value": "On"}]
+        },
+        {
+          "address": 40519,
+          "name": "relay_output_1_state",
+          "unit": "",
+          "alias": "Relay Output 1",
+          "factor": 1.0,
+          "operand": "multiply",
+          "enum": [{"original_value": 0, "display_value": "Off"}, {"original_value": 1, "display_value": "On"}]
+        },
+        {
+          "address": 40520,
+          "name": "relay_output_2_state",
+          "unit": "",
+          "alias": "Relay Output 2",
+          "factor": 1.0,
+          "operand": "multiply",
+          "enum": [{"original_value": 0, "display_value": "Off"}, {"original_value": 1, "display_value": "On"}]
+        },
+        {
+          "address": 40527,
+          "name": "stop_red_lamp_state",
+          "unit": "",
+          "alias": "Red Stop Lamp",
+          "factor": 1.0,
+          "operand": "multiply",
+          "enum": [{"original_value": 0, "display_value": "Off"}, {"original_value": 1, "display_value": "On, Solid"}, {"original_value": 2, "display_value": "On, Flashing"}]
+        },
+        {
+          "address": 40528,
+          "name": "warning_amber_lamp_state",
+          "unit": "",
+          "alias": "Amber Warning Lamp",
+          "factor": 1.0,
+          "operand": "multiply",
+          "enum": [{"original_value": 0, "display_value": "Off"}, {"original_value": 1, "display_value": "On, Solid"}, {"original_value": 2, "display_value": "On, Flashing"}]
+        },
+        {
+          "address": 40532,
+          "name": "mil_lamp_state",
+          "unit": "",
+          "alias": "Mil Indicator",
+          "factor": 1.0,
+          "operand": "multiply",
+          "enum": [{"original_value": 0, "display_value": "Off"}, {"original_value": 1, "display_value": "On, Solid"}, {"original_value": 2, "display_value": "On, Flashing"}]
+        },
+        {
+          "address": 40533,
+          "name": "wait_to_start_lamp_state",
+          "unit": "",
+          "alias": "Wait To Start Lamp",
+          "factor": 1.0,
+          "operand": "multiply",
+          "enum": [{"original_value": 0, "display_value": "Off"}, {"original_value": 1, "display_value": "On, Solid"}, {"original_value": 2, "display_value": "On, Flashing"}]
+        },
+        {
+          "address": 40601,
+          "name": "def_tank_level",
+          "unit": "%",
+          "alias": "DEF Tank Level",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 40801,
+          "name": "control_transducer_level",
+          "unit": "inches",
+          "alias": "Control Transducer Level",
+          "factor": 0.1,
+          "operand": "multiply"
+        },
+        {
+          "address": 40802,
+          "name": "control_transducer_pressure",
+          "unit": "psi",
+          "alias": "Control Transducer Pressure",
+          "factor": 0.1,
+          "operand": "multiply"
+        },
+        {
+          "address": 40803,
+          "name": "inlet_pressure",
+          "unit": "psi",
+          "alias": "Inlet Pressure",
+          "factor": 0.1,
+          "operand": "multiply"
+        },
+        {
+          "address": 40804,
+          "name": "outlet_pressure",
+          "unit": "psi",
+          "alias": "Outlet Pressure 2",
+          "factor": 0.1,
+          "operand": "multiply"
+        },
+        {
+          "address": 40806,
+          "name": "superpump_throttle_manual_auto_status",
+          "unit": "",
+          "alias": "Superpump Throttle Status",
+          "factor": 1.0,
+          "operand": "multiply",
+          "enum": [{"original_value": 0, "display_value": "Manual"}, {"original_value": 1, "display_value": "Auto"}]
+        },
+        {
+          "address": 40807,
+          "name": "superpump_throttle_type",
+          "unit": "",
+          "alias": "Superpump Throttle Type",
+          "factor": 1.0,
+          "operand": "multiply",
+          "enum": [{"original_value": 0, "display_value": "None"}, {"original_value": 1, "display_value": "Single Speed Target"}, {"original_value": 2, "display_value": "Single Speed"}, {"original_value": 3, "display_value": "Linear"}, {"original_value": 4, "display_value": "Target"}, {"original_value": 5, "display_value": "Booster"}]
+        },
+        {
+          "address": 40808,
+          "name": "auto_start_state",
+          "unit": "",
+          "alias": "Auto Start State",
+          "factor": 1.0,
+          "operand": "multiply",
+          "enum": [{"original_value": 0, "display_value": "Disabled"}, {"original_value": 1, "display_value": "Idle, Fuel On"}, {"original_value": 2, "display_value": "Idle, Fuel Off"}, {"original_value": 3, "display_value": "Launch"}, {"original_value": 4, "display_value": "Start Delay"}, {"original_value": 5, "display_value": "Begin Preheat"}, {"original_value": 6, "display_value": "Preheat"}, {"original_value": 7, "display_value": "Begin Crank"}, {"original_value": 8, "display_value": "Crank"}, {"original_value": 9, "display_value": "Rest"}, {"original_value": 10, "display_value": "Begin Warmup"}, {"original_value": 11, "display_value": "Warmup"}, {"original_value": 12, "display_value": "Begin Prime"}, {"original_value": 13, "display_value": "Prime Rampup"}, {"original_value": 14, "display_value": "Prime"}, {"original_value": 15, "display_value": "Begin Rampup"}, {"original_value": 16, "display_value": "Rampup"}, {"original_value": 17, "display_value": "Begin Operate"}, {"original_value": 18, "display_value": "Operate"}, {"original_value": 19, "display_value": "Begin Prime Rampdown"}, {"original_value": 20, "display_value": "Prime Rampdown"}, {"original_value": 21, "display_value": "Begin Rampdown"}, {"original_value": 22, "display_value": "Rampdown"}, {"original_value": 23, "display_value": "Begin Cooldown"}, {"original_value": 24, "display_value": "Cooldown"}, {"original_value": 25, "display_value": "Shutdown"}, {"original_value": 26, "display_value": "Fault"}, {"original_value": 27, "display_value": "Manual Crank"}, {"original_value": 28, "display_value": "Disabled by Fault"}]
+        },
+        {
+          "address": 41001,
+          "name": "number_of_sets_of_active_fault_codes",
+          "unit": "Codes",
+          "alias": "Number Of Active Faults",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "addresses": [41006, 41007],
+          "name": ["active_spn_1_lsb", "active_spn_1_msb"],
+          "unit": "",
+          "alias": "SPN",
+          "factor": 1.0,
+          "operand": "multiply",
+          "combine_operation": "add"
+        },
+        {
+          "address": 41008,
+          "name": "active_fmi_1",
+          "unit": "",
+          "alias": "FMI",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 41009,
+          "name": "active_occurrence_count_1",
+          "unit": "",
+          "alias": "OC",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "addresses": [41010, 41011],
+          "name": ["active_spn_2_lsb", "active_spn_2_msb"],
+          "unit": "",
+          "alias": "SPN",
+          "factor": 1.0,
+          "operand": "multiply",
+          "combine_operation": "add"
+        },
+        {
+          "address": 41012,
+          "name": "active_fmi_2",
+          "unit": "",
+          "alias": "FMI",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 41013,
+          "name": "active_occurrence_count_2",
+          "unit": "",
+          "alias": "OC",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "addresses": [41014, 41015],
+          "name": ["active_spn_3_lsb", "active_spn_3_msb"],
+          "unit": "",
+          "alias": "SPN",
+          "factor": 1.0,
+          "operand": "multiply",
+          "combine_operation": "add"
+        },
+        {
+          "address": 41016,
+          "name": "active_fmi_3",
+          "unit": "",
+          "alias": "FMI",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 41017,
+          "name": "active_occurrence_count_3",
+          "unit": "",
+          "alias": "OC",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "addresses": [41018, 41019],
+          "name": ["active_spn_4_lsb", "active_spn_4_msb"],
+          "unit": "",
+          "alias": "SPN",
+          "factor": 1.0,
+          "operand": "multiply",
+          "combine_operation": "add"
+        },
+        {
+          "address": 41020,
+          "name": "active_fmi_4",
+          "unit": "",
+          "alias": "FMI",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 41021,
+          "name": "active_occurrence_count_4",
+          "unit": "",
+          "alias": "OC",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "addresses": [41022, 41023],
+          "name": ["active_spn_5_lsb", "active_spn_5_msb"],
+          "unit": "",
+          "alias": "SPN",
+          "factor": 1.0,
+          "operand": "multiply",
+          "combine_operation": "add"
+        },
+        {
+          "address": 41024,
+          "name": "active_fmi_5",
+          "unit": "",
+          "alias": "FMI",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 41025,
+          "name": "active_occurrence_count_5",
+          "unit": "",
+          "alias": "OC",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "addresses": [41026, 41027],
+          "name": ["active_spn_6_lsb", "active_spn_6_msb"],
+          "unit": "",
+          "alias": "SPN",
+          "factor": 1.0,
+          "operand": "multiply",
+          "combine_operation": "add"
+        },
+        {
+          "address": 41028,
+          "name": "active_fmi_6",
+          "unit": "",
+          "alias": "FMI",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 41029,
+          "name": "active_occurrence_count_6",
+          "unit": "",
+          "alias": "OC",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "addresses": [41030, 41031],
+          "name": ["active_spn_7_lsb", "active_spn_7_msb"],
+          "unit": "",
+          "alias": "SPN",
+          "factor": 1.0,
+          "operand": "multiply",
+          "combine_operation": "add"
+        },
+        {
+          "address": 41032,
+          "name": "active_fmi_7",
+          "unit": "",
+          "alias": "FMI",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 41033,
+          "name": "active_occurrence_count_7",
+          "unit": "",
+          "alias": "OC",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "addresses": [41034, 41035],
+          "name": ["active_spn_8_lsb", "active_spn_8_msb"],
+          "unit": "",
+          "alias": "SPN",
+          "factor": 1.0,
+          "operand": "multiply",
+          "combine_operation": "add"
+        },
+        {
+          "address": 41036,
+          "name": "active_fmi_8",
+          "unit": "",
+          "alias": "FMI",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 41037,
+          "name": "active_occurrence_count_8",
+          "unit": "",
+          "alias": "OC",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "addresses": [41038, 41039],
+          "name": ["active_spn_9_lsb", "active_spn_9_msb"],
+          "unit": "",
+          "alias": "SPN",
+          "factor": 1.0,
+          "operand": "multiply",
+          "combine_operation": "add"
+        },
+        {
+          "address": 41040,
+          "name": "active_fmi_9",
+          "unit": "",
+          "alias": "FMI",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 41041,
+          "name": "active_occurrence_count_9",
+          "unit": "",
+          "alias": "OC",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "addresses": [41042, 41043],
+          "name": ["active_spn_10_lsb", "active_spn_10_msb"],
+          "unit": "",
+          "alias": "SPN",
+          "factor": 1.0,
+          "operand": "multiply",
+          "combine_operation": "add"
+        },
+        {
+          "address": 41044,
+          "name": "active_fmi_10",
+          "unit": "",
+          "alias": "FMI",
+          "factor": 1.0,
+          "operand": "multiply"
+        },
+        {
+          "address": 41045,
+          "name": "active_occurrence_count_10",
+          "unit": "",
+          "alias": "OC",
+          "factor": 1.0,
+          "operand": "multiply"
+        }
+      ]
+}
