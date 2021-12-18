@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Deploy code to Lambda
-      uses: denzalman/lambda-python-action@v2.0.0
+      uses: denzalman/lambda-python-action@v1.1.0
       with:
         lambda_function_name: 'dev-sentinels7-auth-service'
         lambda_region: 'us-east-1'
