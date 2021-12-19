@@ -8,15 +8,15 @@ Description: >
 Parameters:
   Env:
     Type: String
-  CLIENT_ID:
+  CLIENTID:
     Type: String
-  CLIENT_SECRET:
+  CLIENTSECRET:
     Type: String
   SENTINELS7DBCONNECTIONSTRING:
     Type: String
-  USER_POOL_ID:
+  USERPOOLID:
     Type: String
-  S3_CERTS_BUCKET_NAME:
+  S3CERTSBUCKETNAME:
     Type: String
     
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
@@ -36,11 +36,11 @@ Resources:
         - x86_64
       Environment:
         Variables:
-          CLIENT_ID: !Sub "${CLIENT_ID}"
-          CLIENT_SECRET: !Sub "${CLIENT_SECRET}"
+          CLIENT_ID: !Sub "${CLIENTID}"
+          CLIENT_SECRET: !Sub "${CLIENTSECRET}"
           SENTINELS7DBCONNECTIONSTRING: !Sub "${SENTINELS7DBCONNECTIONSTRING}"
-          USER_POOL_ID: !Sub "${USER_POOL_ID}"
-          S3_CERTS_BUCKET_NAME: !Sub "${Env}-${S3_CERTS_BUCKET_NAME}"
+          USER_POOL_ID: !Sub "${USERPOOLID}"
+          S3_CERTS_BUCKET_NAME: !Sub "${Env}-${S3CERTSBUCKETNAME}"
 
 Outputs:
   Sentinels7AuthFunction:
