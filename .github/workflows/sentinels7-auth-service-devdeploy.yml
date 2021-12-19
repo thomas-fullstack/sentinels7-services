@@ -1,4 +1,4 @@
-name: Lambda Dev Push
+name: dev-sentinels7-auth-service lambda Push
 
 on:
   push:
@@ -6,14 +6,14 @@ on:
     branches:
       - develop
     paths: 
-      - "dev-sentinels7-auth-service/**"
+      - "sentinels7-auth-service/**"
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./dev-sentinels7-auth-service
+        working-directory: ./sentinels7-auth-service
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
