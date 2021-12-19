@@ -1,20 +1,30 @@
+name: Lambda Dev Push
+
 on:
   push:
+    # Only run workflow for pushes to specific branches
     branches:
       - develop
+
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./dev-sentinels7-auth-service/DevSentinels7AuthFunction
+        working-directory: ./dev-sentinels7-auth-service
     steps:
     - uses: actions/checkout@v2
-    - name: Deploy code to Lambda
-      uses: qubitro/action-lambda-python-zip@v1.0
+    - uses: actions/setup-python@v2
+    - uses: aws-actions/setup-sam@v1
+    - uses: aws-actions/configure-aws-credentials@v1
       with:
-        lambda_function_name: 'dev-sentinels7-auth-service'
-        lambda_region: 'us-east-1'
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_DEV_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY }}
+        aws-access-key-id: ${{ secrets.AWS_DEV_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+    # sam build 
+    - run: sam build --use-container
+
+    # Run Unit tests- Specify unit tests here 
+
+    # sam deploy
+    - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name dev-sentinels7 --s3-bucket sentinels7-services-dev-deploy --region us-east-1
