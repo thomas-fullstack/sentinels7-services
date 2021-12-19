@@ -29,4 +29,4 @@ jobs:
     # Run Unit tests- Specify unit tests here 
 
     # sam deploy
-    - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name prod-stack-sentinels7-auth-service --s3-bucket sentinels7-services-prod-deploy --parameter-overrides Env=prod --capabilities CAPABILITY_IAM --region us-east-1
+    - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name prod-stack-sentinels7-auth-service --s3-bucket sentinels7-services-prod-deploy --parameter-overrides ParameterKey=Env,ParameterValue=prod ParameterKey=CLIENTID,ParameterValue=${{secrets.PROD_CLIENT_ID}} ParameterKey=CLIENTSECRET,ParameterValue=${{secrets.PROD_CLIENT_SECRET}} ParameterKey=SENTINELS7DBCONNECTIONSTRING,ParameterValue=${{secrets.PROD_SENTINELS7DBCONNECTIONSTRING}} ParameterKey=USERPOOLID,ParameterValue=${{secrets.PROD_USER_POOL_ID}} ParameterKey=S3CERTSBUCKETNAME,ParameterValue=${{secrets.PROD_S3_CERTS_BUCKET_NAME}} --capabilities CAPABILITY_IAM --region us-east-1
