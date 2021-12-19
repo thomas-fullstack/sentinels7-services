@@ -5,6 +5,10 @@ Description: >
 
   Sample SAM Template for sentinels7-auth-service
 
+Parameters:
+Env:
+    Type: String
+    
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
@@ -14,7 +18,7 @@ Resources:
   Sentinels7AuthFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      FunctionName: dev-sentinels7-auth-service
+      FunctionName: !Sub "${Env}-sentinels7-auth-service"
       CodeUri: Sentinels7AuthFunction/
       Handler: app.lambda_handler
       Runtime: python3.8
