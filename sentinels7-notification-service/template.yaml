@@ -8,6 +8,18 @@ Description: >
 Parameters:
   Env:
     Type: String
+  SENTINELS7DBCONNECTIONSTRING:
+    Type: String
+  TWILIOACCOUNTSID:
+    Type: String
+  TWILIOAUTHTOKEN:
+    Type: String
+  TWILIOSMSURL:
+    Type: String
+  TWILIOFROMNUMBER:
+    Type: String
+  MAINSERVICEARN:
+    Type: String
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -26,12 +38,12 @@ Resources:
         - x86_64
       Environment:
         Variables:
-          SENTINELS7DBCONNECTIONSTRING: postgres://tsdbadmin:c2lcstu5e40ne7fe@ssjtxd3mkh.pqhane35a5.tsdb.cloud.timescale.com:30475/tsdb?sslmode=require
-          TWILIO_ACCOUNT_SID: 
-          TWILIO_AUTH_TOKEN: 
-          TWILIO_SMS_URL: 
-          TWILIO_FROM_NUMBER: 
-          MAIN_SERVICE_ARN: 
+          SENTINELS7DBCONNECTIONSTRING: !Sub "${SENTINELS7DBCONNECTIONSTRING}"
+          TWILIO_ACCOUNT_SID: !Sub "${TWILIOACCOUNTSID}"
+          TWILIO_AUTH_TOKEN: !Sub "${TWILIOAUTHTOKEN}"
+          TWILIO_SMS_URL: !Sub "${TWILIOSMSURL}"
+          TWILIO_FROM_NUMBER: !Sub "${TWILIOFROMNUMBER}"
+          MAIN_SERVICE_ARN: !Sub "${MAINSERVICEARN}"
 
 Outputs:
   Sentinels7NotificationFunction:
