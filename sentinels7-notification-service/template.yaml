@@ -45,6 +45,15 @@ Resources:
           TWILIO_FROM_NUMBER: !Sub "${TWILIOFROMNUMBER}"
           MAIN_SERVICE_ARN: !Sub "${MAINSERVICEARN}"
 
+          # Use these creds when developing locally
+          # SENTINELS7DBCONNECTIONSTRING: postgres://tsdbadmin:c2lcstu5e40ne7fe@ssjtxd3mkh.pqhane35a5.tsdb.cloud.timescale.com:30475/tsdb?sslmode=require
+          # TWILIO_ACCOUNT_SID: 
+          # TWILIO_AUTH_TOKEN: 
+          # TWILIO_SMS_URL: 
+          # TWILIO_FROM_NUMBER: 
+          # MAIN_SERVICE_ARN: arn:aws:lambda:us-east-1:083603291895:function:dev-sentinels7-main-service
+
+
 Outputs:
   Sentinels7NotificationFunction:
     Description: "SentinelS7 Lambda Function For Checking Alarms and Sending Notifications"
