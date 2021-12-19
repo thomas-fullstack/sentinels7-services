@@ -9,7 +9,7 @@ jobs:
       run:
         working-directory: ./dev-sentinels7-auth-service/DevSentinels7AuthFunction
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
     - name: Deploy code to Lambda
       uses: qubitro/action-lambda-python-zip@v1.0
       with:
