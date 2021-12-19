@@ -6,7 +6,7 @@ Description: >
   Sample SAM Template for sentinels7-auth-service
 
 Parameters:
-Env:
+  Env:
     Type: String
     
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
