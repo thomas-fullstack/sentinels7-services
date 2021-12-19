@@ -1,8 +1,8 @@
-# dev-sentinels7-notification-service
+# sentinels7-main-service
 
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
 
-- DevSentinels7NotificationFunction - Code for the application's Lambda function.
+- Sentinels7MainFunction - Code for the application's Lambda function.
 - events - Invocation events that you can use to invoke the function.
 - tests - Unit tests for the application code. 
 - template.yaml - A template that defines the application's AWS resources.
@@ -56,24 +56,24 @@ You can find your API Gateway Endpoint URL in the output values displayed after 
 Build your application with the `sam build --use-container` command.
 
 ```bash
-dev-sentinels7-notification-service$ sam build --use-container
+sentinels7-main-service$ sam build --use-container
 ```
 
-The SAM CLI installs dependencies defined in `DevSentinels7NotificationFunction/requirements.txt`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
+The SAM CLI installs dependencies defined in `Sentinels7MainFunction/requirements.txt`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
 
 Test a single function by invoking it directly with a test event. An event is a JSON document that represents the input that the function receives from the event source. Test events are included in the `events` folder in this project.
 
 Run functions locally and invoke them with the `sam local invoke` command.
 
 ```bash
-dev-sentinels7-notification-service$ sam local invoke DevSentinels7NotificationFunction --event events/event.json
+sentinels7-main-service$ sam local invoke Sentinels7MainFunction --event events/event.json
 ```
 
 The SAM CLI can also emulate your application's API. Use the `sam local start-api` to run the API locally on port 3000.
 
 ```bash
-dev-sentinels7-notification-service$ sam local start-api
-dev-sentinels7-notification-service$ curl http://localhost:3000/
+sentinels7-main-service$ sam local start-api
+sentinels7-main-service$ curl http://localhost:3000/
 ```
 
 The SAM CLI reads the application template to determine the API's routes and the functions that they invoke. The `Events` property on each function's definition includes the route and method for each path.
@@ -97,7 +97,7 @@ To simplify troubleshooting, SAM CLI has a command called `sam logs`. `sam logs`
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-dev-sentinels7-notification-service$ sam logs -n DevSentinels7NotificationFunction --stack-name dev-sentinels7-notification-service --tail
+sentinels7-main-service$ sam logs -n Sentinels7MainFunction --stack-name sentinels7-main-service --tail
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
@@ -107,12 +107,12 @@ You can find more information and examples about filtering Lambda function logs 
 Tests are defined in the `tests` folder in this project. Use PIP to install the test dependencies and run tests.
 
 ```bash
-dev-sentinels7-notification-service$ pip install -r tests/requirements.txt --user
+sentinels7-main-service$ pip install -r tests/requirements.txt --user
 # unit test
-dev-sentinels7-notification-service$ python -m pytest tests/unit -v
+sentinels7-main-service$ python -m pytest tests/unit -v
 # integration test, requiring deploying the stack first.
 # Create the env variable AWS_SAM_STACK_NAME with the name of the stack we are testing
-dev-sentinels7-notification-service$ AWS_SAM_STACK_NAME=<stack-name> python -m pytest tests/integration -v
+sentinels7-main-service$ AWS_SAM_STACK_NAME=<stack-name> python -m pytest tests/integration -v
 ```
 
 ## Cleanup
@@ -120,7 +120,7 @@ dev-sentinels7-notification-service$ AWS_SAM_STACK_NAME=<stack-name> python -m p
 To delete the sample application that you created, use the AWS CLI. Assuming you used your project name for the stack name, you can run the following:
 
 ```bash
-aws cloudformation delete-stack --stack-name dev-sentinels7-notification-service
+aws cloudformation delete-stack --stack-name sentinels7-main-service
 ```
 
 ## Resources

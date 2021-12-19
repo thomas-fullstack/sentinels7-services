@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from DevSentinels7AuthFunction import app
+from Sentinels7DbInsertFunction import app
 
 
 @pytest.fixture()

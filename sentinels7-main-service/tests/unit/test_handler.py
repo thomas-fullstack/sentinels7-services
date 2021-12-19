@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from DevSentinels7MainFunction import app
+from Sentinels7MainFunction import app
 
 
 @pytest.fixture()

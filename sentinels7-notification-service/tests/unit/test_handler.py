@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from DevSentinels7NotificationFunction import app
+from Sentinels7NotificationFunction import app
 
 
 @pytest.fixture()

@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sentinels7-notification-service
+
+  Sample SAM Template for sentinels7-notification-service
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 30
+
+Resources:
+  Sentinels7NotificationFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: dev-sentinels7-notification-service
+      CodeUri: Sentinels7NotificationFunction/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          SENTINELS7DBCONNECTIONSTRING: postgres://tsdbadmin:c2lcstu5e40ne7fe@ssjtxd3mkh.pqhane35a5.tsdb.cloud.timescale.com:30475/tsdb?sslmode=require
+          TWILIO_ACCOUNT_SID: 
+          TWILIO_AUTH_TOKEN: 
+          TWILIO_SMS_URL: 
+          TWILIO_FROM_NUMBER: 
+          MAIN_SERVICE_ARN: 
+
+Outputs:
+  Sentinels7NotificationFunction:
+    Description: "SentinelS7 Lambda Function For Checking Alarms and Sending Notifications"
+    Value: !GetAtt Sentinels7NotificationFunction.Arn

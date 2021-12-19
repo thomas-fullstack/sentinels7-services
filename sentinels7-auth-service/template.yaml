@@ -1,9 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  dev-sentinels7-auth-service
+  sentinels7-auth-service
 
-  Sample SAM Template for dev-sentinels7-auth-service
+  Sample SAM Template for sentinels7-auth-service
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -11,11 +11,11 @@ Globals:
     Timeout: 3
 
 Resources:
-  DevSentinels7AuthFunction:
+  Sentinels7AuthFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       FunctionName: dev-sentinels7-auth-service
-      CodeUri: DevSentinels7AuthFunction/
+      CodeUri: Sentinels7AuthFunction/
       Handler: app.lambda_handler
       Runtime: python3.8
       Architectures:
@@ -29,6 +29,6 @@ Resources:
           S3_CERTS_BUCKET_NAME: dev-sentinels7-certs
 
 Outputs:
-  DevSentinels7AuthFunction:
-    Description: "Dev SentinelS7 Lambda Function For Auth"
-    Value: !GetAtt DevSentinels7AuthFunction.Arn
+  Sentinels7AuthFunction:
+    Description: "SentinelS7 Lambda Function For Auth"
+    Value: !GetAtt Sentinels7AuthFunction.Arn

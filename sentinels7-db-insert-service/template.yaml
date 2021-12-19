@@ -1,9 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  dev-sentinels7-db-insert-service
+  sentinels7-db-insert-service
 
-  Sample SAM Template for dev-sentinels7-db-insert-service
+  Sample SAM Template for sentinels7-db-insert-service
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -11,11 +11,11 @@ Globals:
     Timeout: 10
 
 Resources:
-  DevSentinels7DbInsertFunction:
+  Sentinels7DbInsertFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
      FunctionName: dev-sentinels7-db-insert-service
-      CodeUri: DevSentinels7DbInsertFunction/
+      CodeUri: Sentinels7DbInsertFunction/
       Handler: app.lambda_handler
       Runtime: python3.8
       Architectures:
@@ -25,6 +25,6 @@ Resources:
           SENTINELS7DBCONNECTIONSTRING: postgres://tsdbadmin:c2lcstu5e40ne7fe@ssjtxd3mkh.pqhane35a5.tsdb.cloud.timescale.com:30475/tsdb?sslmode=require
 
 Outputs:
-  DevSentinels7DbInsertFunction:
-    Description: "Dev SentinelS7 Lambda Function For DB Insert"
-    Value: !GetAtt DevSentinels7DbInsertFunction.Arn
+  Sentinels7DbInsertFunction:
+    Description: "SentinelS7 Lambda Function For DB Insert"
+    Value: !GetAtt Sentinels7DbInsertFunction.Arn
