@@ -14,31 +14,17 @@ Resources:
   DevSentinels7DbInsertFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
+     FunctionName: dev-sentinels7-db-insert-service
       CodeUri: DevSentinels7DbInsertFunction/
       Handler: app.lambda_handler
       Runtime: python3.8
       Architectures:
         - x86_64
-      Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /hello
-            Method: get
       Environment:
         Variables:
           SENTINELS7DBCONNECTIONSTRING: postgres://tsdbadmin:c2lcstu5e40ne7fe@ssjtxd3mkh.pqhane35a5.tsdb.cloud.timescale.com:30475/tsdb?sslmode=require
 
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
   DevSentinels7DbInsertFunction:
-    Description: "Hello World Lambda Function ARN"
+    Description: "Dev SentinelS7 Lambda Function For DB Insert"
     Value: !GetAtt DevSentinels7DbInsertFunction.Arn
-  DevSentinels7DbInsertFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt DevSentinels7DbInsertFunctionRole.Arn
