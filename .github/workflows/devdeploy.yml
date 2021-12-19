@@ -27,4 +27,4 @@ jobs:
     # Run Unit tests- Specify unit tests here 
 
     # sam deploy
-    - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name dev-sentinels7 --s3-bucket sentinels7-services-dev-deploy --region us-east-1
+    - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name dev-sentinels7 --s3-bucket sentinels7-services-dev-deploy --capabilities CAPABILITY_IAM --region us-east-1
