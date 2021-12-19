@@ -8,6 +8,8 @@ Description: >
 Parameters:
   Env:
     Type: String
+  SENTINELS7DBCONNECTIONSTRING:
+    Type: String
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -26,7 +28,7 @@ Resources:
         - x86_64
       Environment:
         Variables:
-          SENTINELS7DBCONNECTIONSTRING: postgres://tsdbadmin:c2lcstu5e40ne7fe@ssjtxd3mkh.pqhane35a5.tsdb.cloud.timescale.com:30475/tsdb?sslmode=require
+          SENTINELS7DBCONNECTIONSTRING: !Sub "${SENTINELS7DBCONNECTIONSTRING}"
 
 Outputs:
   Sentinels7DbInsertFunction:
