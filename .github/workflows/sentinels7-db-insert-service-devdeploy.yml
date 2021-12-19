@@ -29,4 +29,4 @@ jobs:
     # Run Unit tests- Specify unit tests here 
 
     # sam deploy
-    - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name dev-stack-sentinels7-db-insert-service --s3-bucket sentinels7-services-dev-deploy --parameter-overrides ParameterKey=Env,ParameterValue=dev ParameterKey=SENTINELS7DBCONNECTIONSTRING,ParameterValue=${{secrets.SENTINELS7DBCONNECTIONSTRING}} --capabilities CAPABILITY_IAM --region us-east-1
+    - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name dev-stack-sentinels7-db-insert-service --s3-bucket sentinels7-services-dev-deploy --parameter-overrides ParameterKey=Env,ParameterValue=dev ParameterKey=SENTINELS7DBCONNECTIONSTRING,ParameterValue=${{secrets.DEV_SENTINELS7DBCONNECTIONSTRING}} --capabilities CAPABILITY_IAM --region us-east-1
