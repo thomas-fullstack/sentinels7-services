@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sentinels7-auth-service
+
+  Sample SAM Template for sentinels7-auth-service
+
+Parameters:
+  Env:
+    Type: String
+    
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  Sentinels7AuthFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: !Sub "${Env}-sentinels7-auth-service"
+      CodeUri: Sentinels7AuthFunction/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          CLIENT_ID: 2p6hnvdjrtspjrmnj440v9udfk
+          CLIENT_SECRET: hd9ofh57jssbjdr5onkm34a377f5eccs4hup5t6b9cj1gn07u2u
+          SENTINELS7DBCONNECTIONSTRING: postgres://tsdbadmin:c2lcstu5e40ne7fe@ssjtxd3mkh.pqhane35a5.tsdb.cloud.timescale.com:30475/tsdb?sslmode=require
+          USER_POOL_ID: us-east-1_J6zRPslyA
+          S3_CERTS_BUCKET_NAME: !Sub "${Env}-sentinels7-certs"
+
+Outputs:
+  Sentinels7AuthFunction:
+    Description: "SentinelS7 Lambda Function For Auth"
+    Value: !GetAtt Sentinels7AuthFunction.Arn

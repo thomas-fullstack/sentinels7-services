@@ -4,15 +4,15 @@
         {
             "type": "aws-sam",
             "request": "direct-invoke",
-            "name": "dev-sentinels7-notification-service:DevSentinels7NotificationFunction (python3.8)",
+            "name": "sentinels7-notification-service:Sentinels7NotificationFunction (python3.8)",
             "invokeTarget": {
                 "target": "template",
-                "templatePath": "${workspaceFolder}/dev-sentinels7-notification-service/template.yaml",
-                "logicalId": "DevSentinels7NotificationFunction"
+                "templatePath": "${workspaceFolder}/sentinels7-notification-service/template.yaml",
+                "logicalId": "Sentinels7NotificationFunction"
             },
             "lambda": {
                 "payload": {
-                    "path": "${workspaceFolder}/dev-sentinels7-notification-service/events/event_notification_invoke_test.json"
+                    "path": "${workspaceFolder}/sentinels7-notification-service/events/event_notification_invoke_test.json"
                 },
                 "environmentVariables": {},
                 "runtime": "python3.8"
@@ -21,11 +21,11 @@
         {
             "type": "aws-sam",
             "request": "direct-invoke",
-            "name": "API dev-sentinels7-notification-service:DevSentinels7NotificationFunction (python3.8)",
+            "name": "API sentinels7-notification-service:Sentinels7NotificationFunction (python3.8)",
             "invokeTarget": {
                 "target": "api",
-                "templatePath": "${workspaceFolder}/dev-sentinels7-notification-service/template.yaml",
-                "logicalId": "DevSentinels7NotificationFunction"
+                "templatePath": "${workspaceFolder}/sentinels7-notification-service/template.yaml",
+                "logicalId": "Sentinels7NotificationFunction"
             },
             "api": {
                 "path": "/hello",
@@ -41,15 +41,15 @@
         {
             "type": "aws-sam",
             "request": "direct-invoke",
-            "name": "dev-sentinels7-main-service:DevSentinels7MainFunction (python3.8)",
+            "name": "sentinels7-main-service:Sentinels7MainFunction (python3.8)",
             "invokeTarget": {
                 "target": "template",
-                "templatePath": "${workspaceFolder}/dev-sentinels7-main-service/template.yaml",
-                "logicalId": "DevSentinels7MainFunction"
+                "templatePath": "${workspaceFolder}/sentinels7-main-service/template.yaml",
+                "logicalId": "Sentinels7MainFunction"
             },
             "lambda": {
                 "payload": {
-                    "path": "${workspaceFolder}/dev-sentinels7-main-service/events/event_test_single_device_feed_get.json"
+                    "path": "${workspaceFolder}/sentinels7-main-service/events/event_test_single_device_feed_get.json"
                 },
                 "environmentVariables": {},
                 "runtime": "python3.8"
@@ -58,11 +58,11 @@
         {
             "type": "aws-sam",
             "request": "direct-invoke",
-            "name": "API dev-sentinels7-main-service:DevSentinels7MainFunction (python3.8)",
+            "name": "API sentinels7-main-service:Sentinels7MainFunction (python3.8)",
             "invokeTarget": {
                 "target": "api",
-                "templatePath": "${workspaceFolder}/dev-sentinels7-main-service/template.yaml",
-                "logicalId": "DevSentinels7MainFunction"
+                "templatePath": "${workspaceFolder}/sentinels7-main-service/template.yaml",
+                "logicalId": "Sentinels7MainFunction"
             },
             "api": {
                 "path": "/hello",
@@ -78,15 +78,15 @@
         {
             "type": "aws-sam",
             "request": "direct-invoke",
-            "name": "dev-sentinels7-db-insert-service:DevSentinels7DbInsertFunction (python3.8)",
+            "name": "sentinels7-db-insert-service:Sentinels7DbInsertFunction (python3.8)",
             "invokeTarget": {
                 "target": "template",
-                "templatePath": "${workspaceFolder}/dev-sentinels7-db-insert-service/template.yaml",
-                "logicalId": "DevSentinels7DbInsertFunction"
+                "templatePath": "${workspaceFolder}/sentinels7-db-insert-service/template.yaml",
+                "logicalId": "Sentinels7DbInsertFunction"
             },
             "lambda": {
                 "payload": {
-                    "path": "${workspaceFolder}/dev-sentinels7-db-insert-service/events/event_db_insert.json"
+                    "path": "${workspaceFolder}/sentinels7-db-insert-service/events/event_db_insert.json"
                 },
                 "environmentVariables": {},
                 "runtime": "python3.8"
@@ -95,11 +95,11 @@
         {
             "type": "aws-sam",
             "request": "direct-invoke",
-            "name": "API dev-sentinels7-db-insert-service:DevSentinels7DbInsertFunction (python3.8)",
+            "name": "API sentinels7-db-insert-service:Sentinels7DbInsertFunction (python3.8)",
             "invokeTarget": {
                 "target": "api",
-                "templatePath": "${workspaceFolder}/dev-sentinels7-db-insert-service/template.yaml",
-                "logicalId": "DevSentinels7DbInsertFunction"
+                "templatePath": "${workspaceFolder}/sentinels7-db-insert-service/template.yaml",
+                "logicalId": "Sentinels7DbInsertFunction"
             },
             "api": {
                 "path": "/hello",
@@ -115,15 +115,15 @@
         {
             "type": "aws-sam",
             "request": "direct-invoke",
-            "name": "dev-sentinels7-auth-service:DevSentinels7AuthFunction (python3.8)",
+            "name": "sentinels7-auth-service:Sentinels7AuthFunction (python3.8)",
             "invokeTarget": {
                 "target": "template",
-                "templatePath": "${workspaceFolder}/dev-sentinels7-auth-service/template.yaml",
-                "logicalId": "DevSentinels7AuthFunction"
+                "templatePath": "${workspaceFolder}/sentinels7-auth-service/template.yaml",
+                "logicalId": "Sentinels7AuthFunction"
             },
             "lambda": {
                 "payload": {
-                    "path": "${workspaceFolder}/dev-sentinels7-auth-service/events/event_test_device_id.json"
+                    "path": "${workspaceFolder}/sentinels7-auth-service/events/event_test_device_id.json"
                 },
                 "environmentVariables": {},
                 "runtime": "python3.8"
@@ -132,11 +132,11 @@
         {
             "type": "aws-sam",
             "request": "direct-invoke",
-            "name": "API dev-sentinels7-auth-service:DevSentinels7AuthFunction (python3.8)",
+            "name": "API sentinels7-auth-service:Sentinels7AuthFunction (python3.8)",
             "invokeTarget": {
                 "target": "api",
-                "templatePath": "${workspaceFolder}/dev-sentinels7-auth-service/template.yaml",
-                "logicalId": "DevSentinels7AuthFunction"
+                "templatePath": "${workspaceFolder}/sentinels7-auth-service/template.yaml",
+                "logicalId": "Sentinels7AuthFunction"
             },
             "api": {
                 "path": "/hello",
