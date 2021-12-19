@@ -4,6 +4,10 @@ Description: >
   sentinels7-db-insert-service
 
   Sample SAM Template for sentinels7-db-insert-service
+  
+Parameters:
+  Env:
+    Type: String
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -14,7 +18,7 @@ Resources:
   Sentinels7DbInsertFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-     FunctionName: dev-sentinels7-db-insert-service
+     FunctionName: !Sub "${Env}-sentinels7db-insert-service"
       CodeUri: Sentinels7DbInsertFunction/
       Handler: app.lambda_handler
       Runtime: python3.8
