@@ -356,6 +356,11 @@ def lambda_handler(event, context):
                     device_alarms_notification_status = get_device_alarms_notification_status(device_id)
                     set_alarm_flags_and_send_notifications(device_id, user_devices_info, sms_numbers, alarm_fields, allFeedData, device_alarms_notification_status)
             
+    # This is a good way to test Twilio SMS.
+    # Dev creds will NOT actually send a message to the phone number but will show "Twilio returned " messages
+    # with the details. This should help for local and dev testing
+    # send_sms(["Phone number to deliver the text"], "Hey this is a test")
+
     # TODO implement
     return {
         'statusCode': 200,
