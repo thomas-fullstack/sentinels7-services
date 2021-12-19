@@ -1,12 +1,9 @@
-name: Deploy lambda 
-
 on:
   push:
     branches:
       - develop
-
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -14,11 +11,10 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Deploy code to Lambda
-      uses: denzalman/lambda-python-action@v1.1.0
+      uses: qubitro/action-lambda-python-zip@v1.0
       with:
         lambda_function_name: 'dev-sentinels7-auth-service'
         lambda_region: 'us-east-1'
-        requirements_txt: 'requirements.txt'
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_DEV_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY }}
