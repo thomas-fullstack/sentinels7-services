@@ -29,5 +29,5 @@ Resources:
 
 Outputs:
   DevSentinels7AuthFunction:
-    Description: "Hello World Lambda Function ARN"
+    Description: "Dev SentinelS7 Lambda Function For Auth"
     Value: !GetAtt DevSentinels7AuthFunction.Arn
