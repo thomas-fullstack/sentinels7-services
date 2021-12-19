@@ -30,7 +30,7 @@ Resources:
           CLIENT_SECRET: hd9ofh57jssbjdr5onkm34a377f5eccs4hup5t6b9cj1gn07u2u
           SENTINELS7DBCONNECTIONSTRING: postgres://tsdbadmin:c2lcstu5e40ne7fe@ssjtxd3mkh.pqhane35a5.tsdb.cloud.timescale.com:30475/tsdb?sslmode=require
           USER_POOL_ID: us-east-1_J6zRPslyA
-          S3_CERTS_BUCKET_NAME: dev-sentinels7-certs
+          S3_CERTS_BUCKET_NAME: !Sub "${Env}-sentinels7-certs"
 
 Outputs:
   Sentinels7AuthFunction:
