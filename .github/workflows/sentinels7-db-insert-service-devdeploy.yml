@@ -1,4 +1,4 @@
-name: dev-db-insert-service lambda Push
+name: dev-sentinels7-db-insert-service lambda Push
 
 on:
   push:
