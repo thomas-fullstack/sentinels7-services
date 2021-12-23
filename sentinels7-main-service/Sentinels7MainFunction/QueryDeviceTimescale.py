@@ -11,41 +11,36 @@ class QueryDeviceTimescale:
 
     def run_device_query(self, device_id, table_name):
             db = SentinelS7Database(None)
-            query = "SET statement_timeout = '300'; SELECT * FROM {} WHERE device_id = '{}' and published_at > now() - INTERVAL '{}' ORDER BY published_at DESC LIMIT {};".format(table_name, device_id, '7 days', 95)
+            column_names = "published_at,device_id,cpu_temp_deg_c,cpu_usage_percent,ram_usage_percent,gps_lat,gps_lon,cellular_signal_strength,cellular_career,modbus_active,percent_load,actual_engine_percent_torque,engine_speed,total_engine_hours_lsb,total_engine_hours_msb,engine_coolant_temperature,engine_oil_temperature,fuel_delivery_pressure,engine_oil_pressure,coolant_level,fuel_rate,air_inlet_temperature,boost_pressure,alternator_potential_voltage,electrical_potential_voltage,battery_potential_voltage,injector_metering_rail_1_pressure,injector_metering_rail_2_pressure,fuel_level,short_term_fuel_trim_bank_1,inlet_suction_pressure,outlet_discharge_pressure,flow_rate,superpump_level_control,superpump_pressure_control,key_position,flow_rate_sender,water_temperature_sender,flow_rate_total_lsb,flow_rate_total_msb,digital_input_1_state,digital_input_2_state,relay_output_1_state,relay_output_2_state,stop_red_lamp_state,warning_amber_lamp_state,mil_lamp_state,wait_to_start_lamp_state,def_tank_level,control_transducer_level,control_transducer_pressure,inlet_pressure,outlet_pressure,superpump_throttle_manual_auto_status,superpump_throttle_type,auto_start_state,number_of_sets_of_active_fault_codes,active_spn_1_lsb,active_spn_1_msb,active_fmi_1,active_occurrence_count_1,active_spn_2_lsb,active_spn_2_msb,active_fmi_2,active_occurrence_count_2,active_spn_3_lsb,active_spn_3_msb,active_fmi_3,active_occurrence_count_3,active_spn_4_lsb,active_spn_4_msb,active_fmi_4,active_occurrence_count_4,active_spn_5_lsb,active_spn_5_msb,active_fmi_5,active_occurrence_count_5,active_spn_6_lsb,active_spn_6_msb,active_fmi_6,active_occurrence_count_6,active_spn_7_lsb,active_spn_7_msb,active_fmi_7,active_occurrence_count_7,active_spn_8_lsb,active_spn_8_msb,active_fmi_8,active_occurrence_count_8,active_spn_9_lsb,active_spn_9_msb,active_fmi_9,active_occurrence_count_9,active_spn_10_lsb,active_spn_10_msb,active_fmi_10,active_occurrence_count_10"
+            column_names_array = column_names.split(",")
+            # print(column_names_array)
+            
+            query = "SELECT * FROM {} WHERE device_id = '{}' and published_at > now() - INTERVAL '{}' ORDER BY published_at DESC LIMIT 1;".format(table_name, device_id, '7 days')
             # print(query)
             device_results = db.get_select_query_all_results(query)
 
             device_results_formatted_json = None
             if len(device_results) > 0:
-                # Grab the first row's publish time
-                published_at = device_results[0][0].isoformat().replace('+00:00', 'Z')
-                # print(published_at)
+                device_results_row = device_results[0]
+                published_at = device_results_row[0].isoformat().replace('+00:00', 'Z')
                 device_results_json = {}
-                for device_result in device_results:
-                    device_results_json[device_result[2]] = int(device_result[3])
+                for idx, device_results_col in enumerate(device_results_row):
+                    # print(idx, device_results_col)
+                    device_results_json[column_names_array[idx]] = device_results_col
+                device_results_json.pop('published_at', None)
+                device_results_json.pop('device_id', None)
+
+                # print(device_results_json)
+
+                # # Grab the first row's publish time
+                # published_at = device_results[0][0].isoformat().replace('+00:00', 'Z')
+                # # print(published_at)
+                # device_results_json = {}
+                # for device_result in device_results:
+                #     device_results_json[device_result[2]] = int(device_result[3])
                 device_results_formatted_json = self.format_device_results(device_results_json)
                 device_results_formatted_json = self.transform_device_results(device_results_formatted_json)
                 device_results_formatted_json['published_at'] = published_at
-                # print(device_results_formatted_json)
-            # for row in device_results:
-            #     print(row)
-            # cursor.close()
-            # See records ingested into this table so far
-            # device_id = "'" + device_id + "'"
-            # DEVICE_QUERY = 'SELECT measure_name as name, measure_value::bigint as value, published_at FROM "ternstar-db"."' + table_name + '" where device_id = ' + device_id + ' and time between ago(7d) and now() ORDER BY published_at DESC LIMIT 94'
-            # device_results = self.run_query(DEVICE_QUERY)
-            # print(device_results)
-            # device_results_json = {}
-            # device_results_formatted_json = None
-            # published_at = None
-            # if len(device_results) > 0:
-            #     # Grab the first row's publish time
-            #     published_at = device_results[0][2]
-            #     for device_result in device_results:
-            #         device_results_json[device_result[0]] = int(device_result[1])
-            #     device_results_formatted_json = self.format_device_results(device_results_json)
-            #     device_results_formatted_json = self.transform_device_results(device_results_formatted_json)
-            #     device_results_formatted_json['published_at'] = published_at
             return device_results_formatted_json
             
     def transform_device_results(self, device_results_formatted_json):
