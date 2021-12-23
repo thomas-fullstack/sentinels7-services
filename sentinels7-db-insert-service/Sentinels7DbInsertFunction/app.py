@@ -1,6 +1,6 @@
 import json
 import os
-# import psycopg2
+import psycopg2
 from SentinelS7Database import SentinelS7Database
 # import requests
 
