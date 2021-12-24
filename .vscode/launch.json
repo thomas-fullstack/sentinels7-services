@@ -148,6 +148,42 @@
             "lambda": {
                 "runtime": "python3.8"
             }
+        },{
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "sentinels7-reporting-service:Sentinels7ReportingFunction (python3.8)",
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "${workspaceFolder}/sentinels7-reporting-service/template.yaml",
+                "logicalId": "Sentinels7ReportingFunction"
+            },
+            "lambda": {
+                "payload": {
+                    "path": "${workspaceFolder}/sentinels7-reporting-service/events/event_device_report.json"
+                },
+                "environmentVariables": {},
+                "runtime": "python3.8"
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "API sentinels7-reporting-service:Sentinels7ReportingFunction (python3.8)",
+            "invokeTarget": {
+                "target": "api",
+                "templatePath": "${workspaceFolder}/sentinels7-reporting-service/template.yaml",
+                "logicalId": "Sentinels7ReportingFunction"
+            },
+            "api": {
+                "path": "/hello",
+                "httpMethod": "get",
+                "payload": {
+                    "json": {}
+                }
+            },
+            "lambda": {
+                "runtime": "python3.8"
+            }
         }
     ]
 }
