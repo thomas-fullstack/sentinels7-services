@@ -1,6 +1,6 @@
 {
-  "device_id": "2044SBI17497",
-  "table_name": "dev_ternstar_fleet",
+  "device_alias": "dev_ternstar_device_1",
+  "client_id": "dev_ternstar_company",
   "from_date_time_utc_iso_str": "2021-12-23T03:48:08.313012+00:00",
   "to_date_time_utc_iso_str": "2021-12-24T03:48:08.313012+00:00"
 }
