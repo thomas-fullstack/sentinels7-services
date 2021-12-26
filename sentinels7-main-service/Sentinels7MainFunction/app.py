@@ -50,7 +50,7 @@ def lambda_handler(event, context):
             device_id_and_table_name = get_device_id_and_table_name(queried_device_name, queried_client_name)
             
             if len(device_id_and_table_name) == 2:
-                client = boto3.client('iot-data', region_name='us-east-1')
+                client = boto3.client('iot-data', region_name='us-east-1', verify=False)
                 response =  client.publish(
                             # topic='ternstar_company/send_device_commands/10000000d92ef835',
                             # topic='ternstar_company/send_device_commands/10000000a3dd89be',
@@ -71,7 +71,7 @@ def lambda_handler(event, context):
             device_id_and_table_name = get_device_id_and_table_name(queried_device_name, queried_client_name)
             
             if len(device_id_and_table_name) == 2:
-                client = boto3.client('iot-data', region_name='us-east-1')
+                client = boto3.client('iot-data', region_name='us-east-1', verify=False)
                 response =  client.publish(
                             # topic='ternstar_company/send_device_commands/10000000d92ef835',
                             # topic='ternstar_company/send_device_commands/10000000a3dd89be',
@@ -92,7 +92,7 @@ def lambda_handler(event, context):
             device_id_and_table_name = get_device_id_and_table_name(queried_device_name, queried_client_name)
             
             if len(device_id_and_table_name) == 2:
-                client = boto3.client('iot-data', region_name='us-east-1')
+                client = boto3.client('iot-data', region_name='us-east-1', verify=False)
                 response =  client.publish(
                             # topic='ternstar_company/send_device_commands/10000000d92ef835',
                             #topic='ternstar_company/send_device_commands/10000000a3dd89be',
@@ -113,7 +113,7 @@ def lambda_handler(event, context):
             device_id_and_table_name = get_device_id_and_table_name(queried_device_name, queried_client_name)
             
             if len(device_id_and_table_name) == 2:
-                client = boto3.client('iot-data', region_name='us-east-1')
+                client = boto3.client('iot-data', region_name='us-east-1', verify=False)
                 response =  client.publish(
                             # topic='ternstar_company/send_device_commands/10000000d92ef835',
                             # topic='ternstar_company/send_device_commands/10000000a3dd89be',
@@ -134,7 +134,7 @@ def lambda_handler(event, context):
             device_id_and_table_name = get_device_id_and_table_name(queried_device_name, queried_client_name)
             
             if len(device_id_and_table_name) == 2:
-                client = boto3.client('iot-data', region_name='us-east-1')
+                client = boto3.client('iot-data', region_name='us-east-1', verify=False)
                 response =  client.publish(
                             # topic='ternstar_company/send_device_commands/10000000d92ef835',
                             #topic='ternstar_company/send_device_commands/10000000a3dd89be',
@@ -154,7 +154,7 @@ def lambda_handler(event, context):
             device_id_and_table_name = get_device_id_and_table_name(queried_device_name, queried_client_name)
             
             if len(device_id_and_table_name) == 2:
-                client = boto3.client('iot-data', region_name='us-east-1')
+                client = boto3.client('iot-data', region_name='us-east-1', verify=False)
                 response =  client.publish(
                             # topic='ternstar_company/send_device_commands/10000000d92ef835',
                             #topic='ternstar_company/send_device_commands/10000000a3dd89be',
@@ -175,7 +175,7 @@ def lambda_handler(event, context):
             device_id_and_table_name = get_device_id_and_table_name(queried_device_name, queried_client_name)
             
             if len(device_id_and_table_name) == 2:
-                client = boto3.client('iot-data', region_name='us-east-1')
+                client = boto3.client('iot-data', region_name='us-east-1', verify=False)
                 response =  client.publish(
                             # topic='ternstar_company/send_device_commands/10000000d92ef835',
                             # topic='ternstar_company/send_device_commands/10000000a3dd89be',
