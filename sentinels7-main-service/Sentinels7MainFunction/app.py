@@ -28,6 +28,16 @@ def get_device_id_and_table_name(queried_device_name, queried_client_name):
     else:
         return []
 
+def get_multiple_device_ids_and_table_name(queried_devices_alias_list, queried_client_name):
+    db = SentinelS7Database(None)
+    query = "SELECT id, serial_number, alias, hypertable_name FROM system_view_device_company where alias in ({}) and name = '{}'".format(','.join(['%s'] * len(queried_devices_alias_list)), queried_client_name)
+    devices_company = db.get_select_query_all_results_with_params(query, queried_devices_alias_list)
+
+    if len(devices_company) > 0:
+        return devices_company
+    else:
+        return []
+
 def lambda_handler(event, context):
     result = 'Hello from Lambda!'
     if event is not None:
@@ -205,28 +215,52 @@ def lambda_handler(event, context):
             db = SentinelS7Database(None)
             query = "SELECT id,alias FROM system_view_device_company where name = '{}'".format(queried_client_name)
             device_alias_row = db.get_select_query_all_results(query)
+            devices_result = []
+            devices_alias = []
+            
             if len(device_alias_row) > 0:
+                # print(device_alias_row)
                 for device_alias in device_alias_row:
-                    queried_device_name = device_alias[1]
-                    print(queried_device_name)
-                    device_result = {'device_id': device_alias[0], 'device_alias': device_alias[1], 'device_feed': None}
-                    
-                    device_id_and_table_name = get_device_id_and_table_name(queried_device_name, queried_client_name)
-                                
-                    if len(device_id_and_table_name) == 2:
-                        print(device_id_and_table_name[0])
-                        print(device_id_and_table_name[1])
-                        query_device_timescale = QueryDeviceTimescale(None)
-                        start_time = time.time()
-                        response = None
-                        try:
-                          response = query_device_timescale.run_device_query(device_id_and_table_name[0], device_id_and_table_name[1])
-                        except Exception as e:
-                          print("An exception occurred: " + str(e))
-                        end_time = time.time()
-                        print("--- %s seconds ---" % (end_time - start_time))
-                        device_result['device_feed']= response
-                    result.append(device_result)
+                    alias = device_alias[1]
+                    # print(devices_alias)
+                    devices_alias.append(alias)
+
+            # print(devices_alias)
+            device_ids_and_table_name = get_multiple_device_ids_and_table_name(devices_alias, queried_client_name)
+            devices_table_name = None
+            device_ids = []
+            if len(device_ids_and_table_name) > 0:
+                # print(device_ids_and_table_name)
+                devices_table_name = device_ids_and_table_name[0][3]
+                for items in device_ids_and_table_name:
+                    device_ids.append(items[1])
+                    device_result = {'device_id': items[0], 'device_alias': items[2], 'device_feed': None, 'device_serial': items[1]}
+                    devices_result.append(device_result)
+            # print(devices_table_name)
+            # print(device_ids)
+            if len(device_ids) > 0:
+                query_device_timescale = QueryDeviceTimescale(None)
+                start_time = time.time()
+                responses = None
+                try:
+                    responses = query_device_timescale.run_multiple_devices_query(device_ids, devices_table_name)
+                    for device_result in devices_result:
+                        # print(device_result)
+                        device_serial = device_result['device_serial']
+                        # print(responses)
+                        for device_feed_item in responses:
+                            if device_feed_item['device_id'] == device_serial:
+                                device_result['device_feed'] = device_feed_item
+                except Exception as e:
+                    print("An exception occurred: " + str(e))
+                end_time = time.time()
+                print("--- %s seconds ---" % (end_time - start_time))
+                # print(devices_result)
+            for device_result in devices_result:
+                device_result.pop('device_serial', None)
+                feed_item = device_result['device_feed']
+                feed_item.pop('device_id', None)
+            result = devices_result
         elif event.get('client_id', False):
             db = SentinelS7Database(None)
             queried_client_id = event.get('client_id', False)
