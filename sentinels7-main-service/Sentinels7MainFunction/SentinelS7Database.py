@@ -42,6 +42,16 @@ class SentinelS7Database:
         cursor.close()
         conn.close()
         return results
+    
+    def get_select_query_all_results_with_params(self, query, params):
+        SENTINELS7DBCONNECTIONSTRING = os.environ['SENTINELS7DBCONNECTIONSTRING']
+        conn = psycopg2.connect(SENTINELS7DBCONNECTIONSTRING)
+        cursor = conn.cursor()
+        cursor.execute(query, params)
+        results = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return results
 
     def get_db_connection(self):
         SENTINELS7DBCONNECTIONSTRING = os.environ['SENTINELS7DBCONNECTIONSTRING']
