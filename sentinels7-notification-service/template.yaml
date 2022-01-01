@@ -43,7 +43,6 @@ Resources:
           TWILIO_AUTH_TOKEN: !Sub "${TWILIOAUTHTOKEN}"
           TWILIO_SMS_URL: !Sub "${TWILIOSMSURL}"
           TWILIO_FROM_NUMBER: !Sub "${TWILIOFROMNUMBER}"
-          MAIN_SERVICE_ARN: !Sub "${MAINSERVICEARN}"
 
           # Use these creds when developing locally
           # SENTINELS7DBCONNECTIONSTRING: postgres://tsdbadmin:c2lcstu5e40ne7fe@ssjtxd3mkh.pqhane35a5.tsdb.cloud.timescale.com:30475/tsdb?sslmode=require
@@ -54,7 +53,6 @@ Resources:
           # TWILIO_AUTH_TOKEN: d7d02d30909a75caeddf26cd744eacd9
           # TWILIO_SMS_URL: https://api.twilio.com/2010-04-01/Accounts/{}/Messages.json
           # TWILIO_FROM_NUMBER: "+15005550006"
-          # MAIN_SERVICE_ARN: arn:aws:lambda:us-east-1:083603291895:function:dev-sentinels7-main-service
 
 
 Outputs:

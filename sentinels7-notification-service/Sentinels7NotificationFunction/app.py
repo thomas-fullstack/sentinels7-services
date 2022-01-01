@@ -217,14 +217,15 @@ def get_device_alarms_notification_status(device_id):
         alarms_notification_status.append({
             "notification_status": item[2],
             "alias": item[4],
-            "alarm_alias_field_id": item[1]
+            "alarm_alias_field_id": item[1],
+            "field_name": item[5]
         })
     return alarms_notification_status
     
 def set_notified_last_time_status(device_id, device_alarms_notification_status):
-    print("Update these things")
-    print(device_id)
-    print(device_alarms_notification_status)
+    # print("Update these things")
+    # print(device_id)
+    # print(device_alarms_notification_status)
     db_update = SentinelS7Database(None)
     db_update_conn = db_update.get_db_connection()
     db_update_cursor = db_update_conn.cursor()
@@ -236,17 +237,6 @@ def set_notified_last_time_status(device_id, device_alarms_notification_status):
     db_update_conn.commit()
     db_update_cursor.close()
     db_update_conn.close()
-    # dynamo = boto3.resource('dynamodb').Table('sentinels7-clients')
-    # response = dynamo.scan()
-    # result = None
-    # items = response['Items']
-    # for item in items:
-    #     for device in item['devices']:
-    #         if device['alias'] == device_id:
-    #             device['alarms_notification_status'] = device_alarms_notification_status
-    #             print(item)
-    #             dynamo.put_item(Item= item)
-    # return result
     
 def check_operator(register_value, alarm_expected_value, alarm_operator):
     result = False
@@ -255,39 +245,57 @@ def check_operator(register_value, alarm_expected_value, alarm_operator):
     if alarm_operator == '<=' and register_value <= alarm_expected_value:
         result = True
     return result
+
+def get_user_friendly_value(field_name, feed_item_value):
+    # By default return the same value as a string
+    result = str(feed_item_value)
+    # These fields from the feed are all coming in as enum
+    enum_fields = ['stop_red_lamp_state', 'warning_amber_lamp_state']
+    # If field_name belongs to one of the fields that are coming in as enum
+    # Return the casted enum user friendly result
+    if field_name in enum_fields:
+        if feed_item_value == 0:
+            result = "Off"
+        elif feed_item_value == 1:
+            result = "On, Solid"
+        elif feed_item_value == 1:
+            result = "On, Flashing"
+    return result
     
 def set_alarm_flags_and_send_notifications(device_id, user_devices_info, sms_numbers, alarm_fields, allFeedData, device_alarms_notification_status):
         # print(device_alarms_notification_status)
     alarm_messages_list = []
     alarm_messages_to_revert = []
-    print(alarm_fields)
+    # print(alarm_fields)
     if allFeedData != None:
-        for register in allFeedData['holding_registers']:
-            for field in alarm_fields:
-                if register["alias"] == field["alias"]:
-                    if check_operator(register["value"], field["expected_value"], field["operator"]):
-                        messageBody = "WARNING: \n {} is: {} \n Device Name: {} \n Company Name: {}".format(str(register["alias"]), str(register["value"]), user_devices_info['device_name'], user_devices_info['client_name'])
-                        field["message"] = messageBody
-                        register_alias = register["alias"]
-                        for notification_status in device_alarms_notification_status:
-                            if register["alias"] == notification_status["alias"]:
-                                field["alarms_notification_status"] = notification_status["notification_status"]
-                        alarm_messages_list.append(field)
-                    else:
-                        for notification_status in device_alarms_notification_status:
-                            if register["alias"] == notification_status["alias"]:
-                                # revert it back to false as feed is back to normal
-                                alarm_messages_to_revert.append(field)
-        print("Alert")
-        print(alarm_messages_list)
-        print("Revert Alert")
-        print(alarm_messages_to_revert)
+        for field in alarm_fields:
+            # print(field["field_name"])
+            if field["field_name"] in allFeedData:
+                feed_item_value = allFeedData[field["field_name"]]
+                user_friendly_feed_item_value = get_user_friendly_value(field["field_name"], feed_item_value)
+                if check_operator(feed_item_value, field["expected_value"], field["operator"]):
+                    messageBody = "WARNING: \n {} is: {} \n Device Name: {} \n Company Name: {}".format(str(field["alias"]), str(user_friendly_feed_item_value), user_devices_info['device_name'], user_devices_info['client_name'])
+                    field["message"] = messageBody
+                    # register_alias = field["alias"]
+                    for notification_status in device_alarms_notification_status:
+                        if field["field_name"] == notification_status["field_name"]:
+                            field["alarms_notification_status"] = notification_status["notification_status"]
+                    alarm_messages_list.append(field)
+                else:
+                    for notification_status in device_alarms_notification_status:
+                        if field["field_name"] == notification_status["field_name"]:
+                            # revert it back to false as feed is back to normal
+                            alarm_messages_to_revert.append(field)
+    # print("Alert")
+    # print(alarm_messages_list)
+    # print("Revert Alert")
+    # print(alarm_messages_to_revert)
     
     for messages in alarm_messages_list:
         if messages['alarms_notification_status'] == False:
             print("Set notification Status Flag to True")
             for notification_status in device_alarms_notification_status:
-                    if messages["alias"] == notification_status["alias"]:
+                    if messages["field_name"] == notification_status["field_name"]:
                         notification_status["notification_status"] = True
                         # print("Send Please")
                         send_sms(sms_numbers, messages["message"])
@@ -297,7 +305,7 @@ def set_alarm_flags_and_send_notifications(device_id, user_devices_info, sms_num
             
     for messages in alarm_messages_to_revert:
         for notification_status in device_alarms_notification_status:
-                if messages["alias"] == notification_status["alias"]:
+                if messages["field_name"] == notification_status["field_name"]:
                     notification_status["notification_status"] = False
                     
     # print(device_alarms_notification_status)
@@ -314,6 +322,17 @@ def get_device_sms_numbers(device_id):
         sms_numbers.append(item[3])
     return sms_numbers
 
+def get_device_company(device_serial_number):
+    result = None
+    db = SentinelS7Database(None)
+    query = "SELECT * FROM system_view_device_company where serial_number = '{}'".format(device_serial_number)
+    device_company_rows = db.get_select_query_all_results(query)
+    # print(device_company_rows)
+    
+    if len(device_company_rows) > 0:
+        result = [device_company_rows[0][0], device_company_rows[0][2], device_company_rows[0][4]]
+    return result
+
 def get_device_alarm_fields(device_id):
     db = SentinelS7Database(None)
     query = "SELECT * FROM system_view_device_company_alarm_field where device_id = '{}'".format(device_id)
@@ -325,6 +344,7 @@ def get_device_alarm_fields(device_id):
         alarm_fields.append({
                 "expected_value": item[3],
                 "alias": item[8],
+                "field_name": item[9],
                 "operator": item[4]
             })
     return alarm_fields
@@ -332,30 +352,26 @@ def get_device_alarm_fields(device_id):
 def lambda_handler(event, context):
     # print("Event:")
     # print(event)
-    
-    db = SentinelS7Database(None)
-    query = "SELECT * FROM system_view_device_company"
-    device_company_rows = db.get_select_query_all_results(query)
-    # print(device_company_rows)
-    
-    for item in device_company_rows:
-        device_name = item[2]
-        device_id = item[0]
-        company_name = item[4]
-        user_devices_info = {
-                'device_name': device_name,
-                'client_name': company_name
-            }
+    device_serial_number = event['device_id']
+    # print(device_serial_number)
+    device_company = get_device_company(device_serial_number)
+    user_devices_info = {
+        'device_name': device_company[1],
+        'client_name': device_company[2]
+    }
+    # print(device_company)
+    if len(device_company) > 0:
+        device_id = device_company[0]
         alarm_fields = get_device_alarm_fields(device_id)
+        # print(alarm_fields)
         if len(alarm_fields) > 0:
             sms_numbers = get_device_sms_numbers(device_id)
             if len(sms_numbers) > 0:
-                allFeedData = get_feed_data(user_devices_info)
-                if allFeedData != None:
-                    print("We are ready")
-                    device_alarms_notification_status = get_device_alarms_notification_status(device_id)
-                    set_alarm_flags_and_send_notifications(device_id, user_devices_info, sms_numbers, alarm_fields, allFeedData, device_alarms_notification_status)
-            
+                device_alarms_notification_status = get_device_alarms_notification_status(device_id)
+                # print(device_alarms_notification_status)
+                # print(user_devices_info)
+                set_alarm_flags_and_send_notifications(device_id, user_devices_info, sms_numbers, alarm_fields, event, device_alarms_notification_status)
+       
     # This is a good way to test Twilio SMS.
     # Dev creds will NOT actually send a message to the phone number but will show "Twilio returned " messages
     # with the details. This should help for local and dev testing
