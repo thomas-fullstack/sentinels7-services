@@ -142,23 +142,7 @@ def send_sms(sms_numbers, messageBody):
         except Exception as e:
             # something went wrong!
             return e
-    
-def get_feed_data(user_devices_info):
-    client = boto3.client('lambda')
-    # print("input param to feed")
-    # print(user_devices_info)
-    encoded_data = json.dumps(user_devices_info).encode('utf-8')
-    response = client.invoke(
-        FunctionName = os.environ['MAIN_SERVICE_ARN'],
-        InvocationType = 'RequestResponse',
-        Payload = encoded_data
-    )
-    
-    responseFromChild = json.load(response['Payload'])
-    # print("feed response")
-    # print(responseFromChild)
-    return responseFromChild
-    
+      
 def get_notification_message(resp_dict):
     emailBody = None
     if resp_dict != None:
@@ -205,23 +189,7 @@ def get_feed_token(post_param):
              body=encoded_data)
     feed_token = json.loads(r2.data.decode('utf-8'))
     return feed_token['id_token']
-
-def get_device_alarms_notification_status(device_id):
-    db = SentinelS7Database(None)
-    query = "SELECT * FROM system_view_device_alarm_alias_field_notify where device_id = '{}'".format(device_id)
-    device_alarm_alias_field_notify_rows = db.get_select_query_all_results(query)
-    # print(device_alarm_alias_field_notify_rows)
-    
-    alarms_notification_status = []
-    for item in device_alarm_alias_field_notify_rows:
-        alarms_notification_status.append({
-            "notification_status": item[2],
-            "alias": item[4],
-            "alarm_alias_field_id": item[1],
-            "field_name": item[5]
-        })
-    return alarms_notification_status
-    
+ 
 def set_notified_last_time_status(device_id, device_alarms_notification_status):
     # print("Update these things")
     # print(device_id)
@@ -231,7 +199,7 @@ def set_notified_last_time_status(device_id, device_alarms_notification_status):
     db_update_cursor = db_update_conn.cursor()
     
     for item in device_alarms_notification_status:
-        query = "Update system_device_alarm_notify SET notified = {} where device_id = {} and alarm_alias_field_id = {}".format(item['notification_status'], device_id, item['alarm_alias_field_id'])
+        query = "Update system_device_alarm_notify SET notified = {} where device_id = {} and alarm_alias_field_id = {}".format(item['notified'], device_id, item['alarm_alias_field_id'])
         db_update_cursor.execute(query)
         
     db_update_conn.commit()
@@ -274,12 +242,12 @@ def set_alarm_flags_and_send_notifications(device_id, user_devices_info, sms_num
                 feed_item_value = allFeedData[field["field_name"]]
                 user_friendly_feed_item_value = get_user_friendly_value(field["field_name"], feed_item_value)
                 if check_operator(feed_item_value, field["expected_value"], field["operator"]):
-                    messageBody = "WARNING: \n {} is: {} \n Device Name: {} \n Company Name: {}".format(str(field["alias"]), str(user_friendly_feed_item_value), user_devices_info['device_name'], user_devices_info['client_name'])
+                    messageBody = "WARNING: \n {} is: {} \n Device Name: {} \n Company Name: {}".format(str(field["alias_field"]), str(user_friendly_feed_item_value), user_devices_info['device_name'], user_devices_info['client_name'])
                     field["message"] = messageBody
-                    # register_alias = field["alias"]
+                    # register_alias = field["alias_field"]
                     for notification_status in device_alarms_notification_status:
                         if field["field_name"] == notification_status["field_name"]:
-                            field["alarms_notification_status"] = notification_status["notification_status"]
+                            field["notified"] = notification_status["notified"]
                     alarm_messages_list.append(field)
                 else:
                     for notification_status in device_alarms_notification_status:
@@ -292,11 +260,11 @@ def set_alarm_flags_and_send_notifications(device_id, user_devices_info, sms_num
     # print(alarm_messages_to_revert)
     
     for messages in alarm_messages_list:
-        if messages['alarms_notification_status'] == False:
+        if messages['notified'] == False:
             print("Set notification Status Flag to True")
             for notification_status in device_alarms_notification_status:
                     if messages["field_name"] == notification_status["field_name"]:
-                        notification_status["notification_status"] = True
+                        notification_status["notified"] = True
                         # print("Send Please")
                         send_sms(sms_numbers, messages["message"])
             # print(messages)
@@ -306,7 +274,7 @@ def set_alarm_flags_and_send_notifications(device_id, user_devices_info, sms_num
     for messages in alarm_messages_to_revert:
         for notification_status in device_alarms_notification_status:
                 if messages["field_name"] == notification_status["field_name"]:
-                    notification_status["notification_status"] = False
+                    notification_status["notified"] = False
                     
     # print(device_alarms_notification_status)
     set_notified_last_time_status(device_id, device_alarms_notification_status)
@@ -319,59 +287,67 @@ def get_device_sms_numbers(device_id):
     
     sms_numbers = []
     for item in device_user_contact_rows:
-        sms_numbers.append(item[3])
+        sms_numbers.append(item[1])
     return sms_numbers
 
-def get_device_company(device_serial_number):
-    result = None
+def get_device_notification_config_by_device_serial_number(serial_number):
     db = SentinelS7Database(None)
-    query = "SELECT * FROM system_view_device_company where serial_number = '{}'".format(device_serial_number)
-    device_company_rows = db.get_select_query_all_results(query)
-    # print(device_company_rows)
-    
-    if len(device_company_rows) > 0:
-        result = [device_company_rows[0][0], device_company_rows[0][2], device_company_rows[0][4]]
-    return result
-
-def get_device_alarm_fields(device_id):
-    db = SentinelS7Database(None)
-    query = "SELECT * FROM system_view_device_company_alarm_field where device_id = '{}'".format(device_id)
-    device_company_alarm_field_rows = db.get_select_query_all_results(query)
+    query = query = "SELECT * FROM system_view_device_alarm_notification where serial_number = '{}'".format(serial_number)
+    device_notification_config_rows = db.get_select_query_all_results(query)
     # print(device_company_alarm_field_rows)
     
-    alarm_fields = []
-    for item in device_company_alarm_field_rows:
-        alarm_fields.append({
-                "expected_value": item[3],
-                "alias": item[8],
-                "field_name": item[9],
-                "operator": item[4]
+    notification_config_rows = []
+    for item in device_notification_config_rows:
+        notification_config_rows.append({
+                "expected_value": item[0],
+                "operator": item[1],
+                "alias_field": item[2],
+                "field_name": item[3],
+                "alarm_alias_field_id": item[4],
+                "notified": item[5],
+                "device_id": item[7],
+                "device_name": item[6],
+                "client_name": item[8]
             })
-    return alarm_fields
+    return notification_config_rows
     
 def lambda_handler(event, context):
     # print("Event:")
     # print(event)
     device_serial_number = event['device_id']
     # print(device_serial_number)
-    device_company = get_device_company(device_serial_number)
-    user_devices_info = {
-        'device_name': device_company[1],
-        'client_name': device_company[2]
-    }
-    # print(device_company)
-    if len(device_company) > 0:
-        device_id = device_company[0]
-        alarm_fields = get_device_alarm_fields(device_id)
+    notification_config_rows = get_device_notification_config_by_device_serial_number(device_serial_number)
+    alarm_fields = []
+    device_alarms_notification_status = []
+    if len(notification_config_rows) > 0:
+        user_devices_info = {
+            'device_name': notification_config_rows[0]['device_name'],
+            'client_name': notification_config_rows[0]['client_name']
+        }
+        for item in notification_config_rows:
+            alarm_fields.append({
+                    'expected_value': item['expected_value'],
+                    'alias_field': item['alias_field'],
+                    'field_name': item['field_name'],
+                    'operator': item['operator']
+                })
+            device_alarms_notification_status.append({
+                    'notified': item['notified'],
+                    'alias_field': item['alias_field'],
+                    'alarm_alias_field_id': item['alarm_alias_field_id'],
+                    'field_name': item['field_name']
+                })
+        
+        # print(user_devices_info)
         # print(alarm_fields)
-        if len(alarm_fields) > 0:
-            sms_numbers = get_device_sms_numbers(device_id)
-            if len(sms_numbers) > 0:
-                device_alarms_notification_status = get_device_alarms_notification_status(device_id)
-                # print(device_alarms_notification_status)
-                # print(user_devices_info)
-                set_alarm_flags_and_send_notifications(device_id, user_devices_info, sms_numbers, alarm_fields, event, device_alarms_notification_status)
-       
+        # print(device_alarms_notification_status)
+
+        device_id = notification_config_rows[0]['device_id']
+        sms_numbers = get_device_sms_numbers(device_id)
+        # print(sms_numbers)
+
+        set_alarm_flags_and_send_notifications(device_id, user_devices_info, sms_numbers, alarm_fields, event, device_alarms_notification_status)
+
     # This is a good way to test Twilio SMS.
     # Dev creds will NOT actually send a message to the phone number but will show "Twilio returned " messages
     # with the details. This should help for local and dev testing
