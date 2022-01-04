@@ -142,23 +142,7 @@ def send_sms(sms_numbers, messageBody):
         except Exception as e:
             # something went wrong!
             return e
-    
-def get_feed_data(user_devices_info):
-    client = boto3.client('lambda')
-    # print("input param to feed")
-    # print(user_devices_info)
-    encoded_data = json.dumps(user_devices_info).encode('utf-8')
-    response = client.invoke(
-        FunctionName = os.environ['MAIN_SERVICE_ARN'],
-        InvocationType = 'RequestResponse',
-        Payload = encoded_data
-    )
-    
-    responseFromChild = json.load(response['Payload'])
-    # print("feed response")
-    # print(responseFromChild)
-    return responseFromChild
-    
+      
 def get_notification_message(resp_dict):
     emailBody = None
     if resp_dict != None:
@@ -205,23 +189,7 @@ def get_feed_token(post_param):
              body=encoded_data)
     feed_token = json.loads(r2.data.decode('utf-8'))
     return feed_token['id_token']
-
-def get_device_alarms_notification_status(device_id):
-    db = SentinelS7Database(None)
-    query = "SELECT * FROM system_view_device_alarm_alias_field_notify where device_id = '{}'".format(device_id)
-    device_alarm_alias_field_notify_rows = db.get_select_query_all_results(query)
-    # print(device_alarm_alias_field_notify_rows)
-    
-    alarms_notification_status = []
-    for item in device_alarm_alias_field_notify_rows:
-        alarms_notification_status.append({
-            "notification_status": item[2],
-            "alias": item[4],
-            "alarm_alias_field_id": item[1],
-            "field_name": item[5]
-        })
-    return alarms_notification_status
-    
+ 
 def set_notified_last_time_status(device_id, device_alarms_notification_status):
     # print("Update these things")
     # print(device_id)
@@ -321,33 +289,6 @@ def get_device_sms_numbers(device_id):
     for item in device_user_contact_rows:
         sms_numbers.append(item[1])
     return sms_numbers
-
-def get_device_company(device_serial_number):
-    result = None
-    db = SentinelS7Database(None)
-    query = "SELECT * FROM system_view_device_company where serial_number = '{}'".format(device_serial_number)
-    device_company_rows = db.get_select_query_all_results(query)
-    # print(device_company_rows)
-    
-    if len(device_company_rows) > 0:
-        result = [device_company_rows[0][0], device_company_rows[0][2], device_company_rows[0][4]]
-    return result
-
-def get_device_alarm_fields(device_id):
-    db = SentinelS7Database(None)
-    query = "SELECT * FROM system_view_device_company_alarm_field where device_id = '{}'".format(device_id)
-    device_company_alarm_field_rows = db.get_select_query_all_results(query)
-    # print(device_company_alarm_field_rows)
-    
-    alarm_fields = []
-    for item in device_company_alarm_field_rows:
-        alarm_fields.append({
-                "expected_value": item[3],
-                "alias": item[8],
-                "field_name": item[9],
-                "operator": item[4]
-            })
-    return alarm_fields
 
 def get_device_notification_config_by_device_serial_number(serial_number):
     db = SentinelS7Database(None)
