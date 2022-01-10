@@ -184,6 +184,42 @@
             "lambda": {
                 "runtime": "python3.8"
             }
+        },{
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "sentinels7-admin-service:Sentinels7AdminFunction (python3.8)",
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "${workspaceFolder}/sentinels7-admin-service/template.yaml",
+                "logicalId": "Sentinels7AdminFunction"
+            },
+            "lambda": {
+                "payload": {
+                    "path": "${workspaceFolder}/sentinels7-admin-service/events/event_admin.json"
+                },
+                "environmentVariables": {},
+                "runtime": "python3.8"
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "API sentinels7-admin-service:Sentinels7AdminFunction (python3.8)",
+            "invokeTarget": {
+                "target": "api",
+                "templatePath": "${workspaceFolder}/sentinels7-admin-service/template.yaml",
+                "logicalId": "Sentinels7AdminFunction"
+            },
+            "api": {
+                "path": "/hello",
+                "httpMethod": "get",
+                "payload": {
+                    "json": {}
+                }
+            },
+            "lambda": {
+                "runtime": "python3.8"
+            }
         }
     ]
 }
