@@ -1,0 +1,6 @@
+{
+"add_new_company": true,
+"hyper_table_name": "dev_ternstar_fleet_2",
+"data_retention_policy_in_days": "7",
+"company_name": "dev_ternstar_company_2"
+}

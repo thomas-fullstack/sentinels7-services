@@ -1,0 +1,45 @@
+{
+"add_new_devices": true,
+"company_name": "dev_ternstar_company_2",
+"alarm_enabled_defaults": false,
+"devices": [
+    {
+        "serial_number": "abcd1234",
+        "alias": "Ternstar Dev 0000",
+        "alarms": [{
+            "expected_value": 0, 
+            "operator": "!=", 
+            "value_type": "int",
+            "alarm_alias_field_name": "stop_red_lamp_state",
+            "alarm_enabled": false
+            },
+            {
+                "expected_value": 0, 
+                "operator": "!=", 
+                "value_type": "int",
+                "alarm_alias_field_name": "warning_amber_lamp_state",
+                "alarm_enabled": false
+            }],
+        "notify_user_emails": ["engineering@ternstartech.com"]
+    },
+    {
+        "serial_number": "abcd1235",
+        "alias": "Ternstar Dev 1000",
+        "alarms": [{
+            "expected_value": 0, 
+            "operator": "!=", 
+            "value_type": "int",
+            "alarm_alias_field_name": "stop_red_lamp_state",
+            "alarm_enabled": false
+            },
+            {
+                "expected_value": 0, 
+                "operator": "!=", 
+                "value_type": "int",
+                "alarm_alias_field_name": "warning_amber_lamp_state",
+                "alarm_enabled": false
+            }],
+        "notify_user_emails": ["engineering@ternstartech.com"]
+    }
+]
+}
