@@ -259,7 +259,8 @@ def lambda_handler(event, context):
             for device_result in devices_result:
                 device_result.pop('device_serial', None)
                 feed_item = device_result['device_feed']
-                feed_item.pop('device_id', None)
+                if feed_item != None:
+                    feed_item.pop('device_id', None)
             result = devices_result
         elif event.get('client_id', False):
             db = SentinelS7Database(None)
