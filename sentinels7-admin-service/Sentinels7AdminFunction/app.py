@@ -161,7 +161,7 @@ def add_system_user_app_config_contact(connection, company_name, email, phone_nu
         values2 = (devices_data_refresh_frequency ,new_user_id)
         cursor.execute(query2, values2)
         query3 = "INSERT INTO public.system_user_app_config(id, key, value, type, user_id) VALUES (nextval('user_app_config_id_seq'), 'default_device_id', %s, 'integer', %s);"
-        values3 = (None ,new_user_id)
+        values3 = (-1 ,new_user_id)
         cursor.execute(query3, values3)
         query4 = "INSERT INTO public.system_user_app_config(id, key, value, type, user_id) VALUES (nextval('user_app_config_id_seq'), 'user_is_admin', %s, 'boolean', %s);"
         values4 = (user_is_admin ,new_user_id)
