@@ -77,6 +77,19 @@ def get_client_name(queried_device_id):
     else:
         result = None
 
+def get_modbus_config(file_name):
+    db = SentinelS7Database(None)
+    # print("Device id is: '" + queried_device_id + "'")
+    query = "SELECT json_data FROM system_modbus_config_json where file_name = '{}'".format(file_name)
+    # print(query)
+    modbus_config_row = db.get_select_query_all_results(query)
+    
+    if len(modbus_config_row) > 0:
+        # print("Returning Result: " + result)
+        return modbus_config_row[0][0]
+    else:
+        result = None
+
 def lambda_handler(event, context):
 
     global client
@@ -102,6 +115,10 @@ def lambda_handler(event, context):
                     }
                 )
                 device_info[file] = url
+                # Send modbus config for the device
+                device_info['read_controls_inc_holding_registers_device_full_address_only'] = get_modbus_config('read_controls_inc_holding_registers_device_full_address_only')
+                device_info['read_controls_inc_holding_registers_device_partial_address_only'] = get_modbus_config('read_controls_inc_holding_registers_device_partial_address_only')
+                device_info['read_controls_inc_batch_address_read_range'] = get_modbus_config('read_controls_inc_batch_address_read_range')
             return device_info
         return None
     
