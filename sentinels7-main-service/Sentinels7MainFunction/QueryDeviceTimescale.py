@@ -99,6 +99,10 @@ class QueryDeviceTimescale:
                             register['value'] = self.get_signal_bars(register['value'])
                         elif register['name'] == 'modbus_active':
                             register['value'] = self.get_modbus_active_text(register['value'])
+                        elif register['name'] == 'inlet_pressure':
+                            # Add a special offset of -14.7
+                            register['value'] = round((register['value'] - 147) * register['factor'], 2)
+                            # register['value'] = self.get_modbus_active_text(register['value'])
                         else:
                             register['value'] = round(register['value'] * register['factor'], 2)
                         register = self.remove_props(register)
