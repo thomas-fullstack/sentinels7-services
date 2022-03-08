@@ -9,7 +9,6 @@ def get_fleet_table_create_query(table_name):
     return """CREATE TABLE IF NOT EXISTS {} (
                                             published_at TIMESTAMPTZ NOT NULL,
                                             device_id VARCHAR(16),
-                                            cpu_temp_deg_c BIGINT,
                                             cpu_usage_percent BIGINT,
                                             ram_usage_percent BIGINT,
                                             gps_lat BIGINT,
@@ -135,7 +134,7 @@ def add_system_company(connection, table_name, company_name):
     cursor.close()
     print("{} Inserted row successfully!".format(table_name))
 
-def add_system_user_app_config_contact(connection, company_name, email, phone_numbers, devices_data_partial_publish, devices_data_refresh_frequency, user_is_admin):
+def add_system_user_app_config_contact(connection, company_name, email, phone_numbers, user_is_admin):
     cursor = connection.cursor()
     get_table_name_query = "SELECT id,hypertable_name from system_company where name = '{}';".format(company_name)
     cursor.execute(get_table_name_query)
@@ -154,12 +153,6 @@ def add_system_user_app_config_contact(connection, company_name, email, phone_nu
         print("{} Inserted row successfully!".format(table_name))
 
         print("Inserting rows into : {}".format('system_user_app_config'))
-        query1 = "INSERT INTO public.system_user_app_config(id, key, value, type, user_id) VALUES (nextval('user_app_config_id_seq'), 'devices_data_partial_publish', %s, 'boolean', %s);"
-        values1 = (devices_data_partial_publish ,new_user_id)
-        cursor.execute(query1, values1)
-        query2 = "INSERT INTO public.system_user_app_config(id, key, value, type, user_id) VALUES (nextval('user_app_config_id_seq'), 'devices_data_refresh_frequency', %s, 'string', %s);"
-        values2 = (devices_data_refresh_frequency ,new_user_id)
-        cursor.execute(query2, values2)
         query3 = "INSERT INTO public.system_user_app_config(id, key, value, type, user_id) VALUES (nextval('user_app_config_id_seq'), 'default_device_id', %s, 'integer', %s);"
         values3 = (-1 ,new_user_id)
         cursor.execute(query3, values3)
@@ -264,8 +257,6 @@ def lambda_handler(event, context):
     add_new_user= event.get('add_new_user', False)
     email= event.get('email', None)
     phone_numbers= event.get('phone_numbers', [])
-    devices_data_partial_publish= event.get('devices_data_partial_publish', "false")
-    devices_data_refresh_frequency= event.get('devices_data_refresh_frequency', 'high_frequency')
     user_is_admin= event.get('user_is_admin', "false")
     add_new_devices = event.get('add_new_devices', False)
     devices = event.get('devices', [])
@@ -290,7 +281,7 @@ def lambda_handler(event, context):
 
         if add_new_user:
             print("Running add_system_user_app_config_contact")
-            add_system_user_app_config_contact(admin_conn, company_name, email, phone_numbers, devices_data_partial_publish, devices_data_refresh_frequency, user_is_admin)
+            add_system_user_app_config_contact(admin_conn, company_name, email, phone_numbers, user_is_admin)
             print("Finished Running add_system_user_app_config_contact")
 
         if add_new_devices:

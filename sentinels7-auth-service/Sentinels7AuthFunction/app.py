@@ -117,7 +117,6 @@ def lambda_handler(event, context):
                 device_info[file] = url
                 # Send modbus config for the device
                 device_info['read_controls_inc_holding_registers_device_full_address_only'] = get_modbus_config('read_controls_inc_holding_registers_device_full_address_only')
-                device_info['read_controls_inc_holding_registers_device_partial_address_only'] = get_modbus_config('read_controls_inc_holding_registers_device_partial_address_only')
                 device_info['read_controls_inc_batch_address_read_range'] = get_modbus_config('read_controls_inc_batch_address_read_range')
             return device_info
         return None
