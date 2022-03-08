@@ -127,47 +127,6 @@ def lambda_handler(event, context):
                 result= response
             else:
                 result=None
-        # Set Frequency Feed
-        elif event.get('feed_frequency', False) and event.get('device_name', False) and event.get('client_name', False):
-            queried_device_name = event.get('device_name', False)
-            queried_client_name = event.get('client_name', False)
-            device_id_and_table_name = get_device_id_and_table_name(queried_device_name, queried_client_name)
-            
-            if len(device_id_and_table_name) == 2:
-                client = boto3.client('iot-data', region_name='us-east-1', verify=False)
-                response =  client.publish(
-                            # topic='ternstar_company/send_device_commands/10000000d92ef835',
-                            #topic='ternstar_company/send_device_commands/10000000a3dd89be',
-                            topic='{}/send_device_commands/{}'.format(queried_client_name, device_id_and_table_name[0]),
-                            qos=1,
-                            payload=json.dumps({
-                                "property": "feed",
-                                "value": event.get('feed_frequency')
-                            })
-                            )
-                result= response
-            else:
-                result=None
-        elif event.get('partial_or_full_publish', False) and event.get('device_name', False) and event.get('client_name', False):
-            queried_device_name = event.get('device_name', False)
-            queried_client_name = event.get('client_name', False)
-            device_id_and_table_name = get_device_id_and_table_name(queried_device_name, queried_client_name)
-            
-            if len(device_id_and_table_name) == 2:
-                client = boto3.client('iot-data', region_name='us-east-1', verify=False)
-                response =  client.publish(
-                            # topic='ternstar_company/send_device_commands/10000000d92ef835',
-                            #topic='ternstar_company/send_device_commands/10000000a3dd89be',
-                            topic='{}/send_device_commands/{}'.format(queried_client_name, device_id_and_table_name[0]),
-                            qos=1,
-                            payload=json.dumps({
-                                "property": "feed",
-                                "value": event.get('partial_or_full_publish')
-                            })
-                            )
-                result= response
-            else:
-                result=None
         # Set Engine RPM
         elif event.get('engine_speed', False) and event.get('device_name', False) and event.get('client_name', False):
             queried_device_name = event.get('device_name', False)

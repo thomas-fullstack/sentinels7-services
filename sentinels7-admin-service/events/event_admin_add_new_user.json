@@ -3,7 +3,5 @@
 "company_name": "dev_ternstar_company_2",
 "email": "test@ternstartech.com",
 "phone_numbers": ["+17853405105", "+17853405106"],
-"devices_data_partial_publish": "false",
-"devices_data_refresh_frequency": "high_frequency",
 "user_is_admin": "false"
 }
