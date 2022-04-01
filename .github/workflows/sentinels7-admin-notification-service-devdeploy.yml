@@ -1,0 +1,32 @@
+name: dev-sentinels7-admin-notification-service lambda Push
+
+on:
+  push:
+    # Only run workflow for pushes to specific branches
+    branches:
+      - develop
+    paths: 
+      - "sentinels7-admin-notification-service/**"
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./sentinels7-admin-notification-service
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+    - uses: aws-actions/setup-sam@v1
+    - uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+    # sam build 
+    - run: sam build --use-container
+
+    # Run Unit tests- Specify unit tests here 
+
+    # sam deploy
+    - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name dev-stack-sentinels7-admin-notification-service --s3-bucket sentinels7-services-dev-deploy --parameter-overrides ParameterKey=Env,ParameterValue=dev ParameterKey=SENTINELS7DBCONNECTIONSTRING,ParameterValue=${{secrets.DEV_SENTINELS7DBCONNECTIONSTRING}} ParameterKey=TWILIOACCOUNTSID,ParameterValue=${{secrets.DEV_TWILIO_ACCOUNT_SID}} ParameterKey=TWILIOAUTHTOKEN,ParameterValue=${{secrets.DEV_TWILIO_AUTH_TOKEN}} ParameterKey=TWILIOSMSURL,ParameterValue=${{secrets.DEV_TWILIO_SMS_URL}} ParameterKey=TWILIOFROMNUMBER,ParameterValue=${{secrets.DEV_TWILIO_FROM_NUMBER}} --capabilities CAPABILITY_IAM --region us-east-1
