@@ -198,7 +198,7 @@ def query_fleet_status(fleet_name, message_fleet_status_to_numbers):
     # print(devices)
 
     fleet_offline_message = ""
-    matches = ['just now', 'second', 'minute']
+    matches = ['minutes']
     for device in devices:
         if device['is_online'] == False:
             # print(device['device_name'])
