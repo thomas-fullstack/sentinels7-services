@@ -47,6 +47,7 @@ Resources:
           TWILIO_FROM_NUMBER: !Sub "${TWILIOFROMNUMBER}"
           BALENA_USERNAME: !Sub "${BALENAUSERNAME}"
           BALENA_PASSWORD: !Sub "${BALENAPASSWORD}"
+          BALENA_SETTINGS_HOME_DIRECTORY: /tmp
 
           # Use these creds when developing locally
           # SENTINELS7DBCONNECTIONSTRING: postgres://tsdbadmin:c2lcstu5e40ne7fe@ssjtxd3mkh.pqhane35a5.tsdb.cloud.timescale.com:30475/tsdb?sslmode=require
