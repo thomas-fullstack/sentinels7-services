@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sentinels7-admin-notification-service
+
+  Sample SAM Template for sentinels7-admin-notification-service
+
+Parameters:
+  Env:
+    Type: String
+  SENTINELS7DBCONNECTIONSTRING:
+    Type: String
+  TWILIOACCOUNTSID:
+    Type: String
+  TWILIOAUTHTOKEN:
+    Type: String
+  TWILIOSMSURL:
+    Type: String
+  TWILIOFROMNUMBER:
+    Type: String
+  MAINSERVICEARN:
+    Type: String
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 30
+
+Resources:
+  Sentinels7AdminNotificationFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: !Sub "${Env}-sentinels7-admin-notification-service"
+      CodeUri: Sentinels7AdminNotificationFunction/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          SENTINELS7DBCONNECTIONSTRING: !Sub "${SENTINELS7DBCONNECTIONSTRING}"
+          TWILIO_ACCOUNT_SID: !Sub "${TWILIOACCOUNTSID}"
+          TWILIO_AUTH_TOKEN: !Sub "${TWILIOAUTHTOKEN}"
+          TWILIO_SMS_URL: !Sub "${TWILIOSMSURL}"
+          TWILIO_FROM_NUMBER: !Sub "${TWILIOFROMNUMBER}"
+          BALENA_USERNAME: !Sub "${BALENAUSERNAME}"
+          BALENA_PASSWORD: !Sub "${BALENAPASSWORD}"
+
+          # Use these creds when developing locally
+          # SENTINELS7DBCONNECTIONSTRING: postgres://tsdbadmin:c2lcstu5e40ne7fe@ssjtxd3mkh.pqhane35a5.tsdb.cloud.timescale.com:30475/tsdb?sslmode=require
+          
+          # Dev Twilio creds will NOT actually send a message to the phone number but will show "Twilio returned " log
+          # with the details. This should help for local and dev testing
+          # TWILIO_ACCOUNT_SID: AC8efa783d7839a7b2967268bcd0185511
+          # TWILIO_AUTH_TOKEN: d7d02d30909a75caeddf26cd744eacd9
+          # TWILIO_SMS_URL: https://api.twilio.com/2010-04-01/Accounts/{}/Messages.json
+          # TWILIO_FROM_NUMBER: "+15005550006"
+          # BALENA_USERNAME: YourBalenaEmailID
+          # BALENA_PASSWORD: YourBalenaPassword
+
+Outputs:
+  Sentinels7AdminNotificationFunction:
+    Description: "SentinelS7 Lambda Function For Checking Alarms and Sending Notifications"
+    Value: !GetAtt Sentinels7AdminNotificationFunction.Arn
