@@ -38,16 +38,16 @@ Resources:
         - x86_64
       Environment:
         Variables:
-          # SENTINELS7DBCONNECTIONSTRING: !Sub "${SENTINELS7DBCONNECTIONSTRING}"
-          # TWILIO_ACCOUNT_SID: !Sub "${TWILIOACCOUNTSID}"
-          # TWILIO_AUTH_TOKEN: !Sub "${TWILIOAUTHTOKEN}"
-          # TWILIO_SMS_URL: !Sub "${TWILIOSMSURL}"
-          # TWILIO_FROM_NUMBER: !Sub "${TWILIOFROMNUMBER}"
-          # BALENA_USERNAME: !Sub "${BALENAUSERNAME}"
-          # BALENA_PASSWORD: !Sub "${BALENAPASSWORD}"
+          SENTINELS7DBCONNECTIONSTRING: !Sub "${SENTINELS7DBCONNECTIONSTRING}"
+          TWILIO_ACCOUNT_SID: !Sub "${TWILIOACCOUNTSID}"
+          TWILIO_AUTH_TOKEN: !Sub "${TWILIOAUTHTOKEN}"
+          TWILIO_SMS_URL: !Sub "${TWILIOSMSURL}"
+          TWILIO_FROM_NUMBER: !Sub "${TWILIOFROMNUMBER}"
+          BALENA_USERNAME: !Sub "${BALENAUSERNAME}"
+          BALENA_PASSWORD: !Sub "${BALENAPASSWORD}"
 
           # Use these creds when developing locally
-          SENTINELS7DBCONNECTIONSTRING: postgres://tsdbadmin:c2lcstu5e40ne7fe@ssjtxd3mkh.pqhane35a5.tsdb.cloud.timescale.com:30475/tsdb?sslmode=require
+          # SENTINELS7DBCONNECTIONSTRING: postgres://tsdbadmin:c2lcstu5e40ne7fe@ssjtxd3mkh.pqhane35a5.tsdb.cloud.timescale.com:30475/tsdb?sslmode=require
           
           # Dev Twilio creds will NOT actually send a message to the phone number but will show "Twilio returned " log
           # with the details. This should help for local and dev testing
