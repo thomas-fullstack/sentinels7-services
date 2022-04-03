@@ -220,6 +220,43 @@
             "lambda": {
                 "runtime": "python3.8"
             }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "sentinels7-admin-notification-service:Sentinels7NotificationFunction (python3.8)",
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "${workspaceFolder}/sentinels7-admin-notification-service/template.yaml",
+                "logicalId": "Sentinels7NotificationFunction"
+            },
+            "lambda": {
+                "payload": {
+                    "path": "${workspaceFolder}/sentinels7-admin-notification-service/events/event_notification_invoke_test.json"
+                },
+                "environmentVariables": {},
+                "runtime": "python3.8"
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "API sentinels7-admin-notification-service:Sentinels7NotificationFunction (python3.8)",
+            "invokeTarget": {
+                "target": "api",
+                "templatePath": "${workspaceFolder}/sentinels7-admin-notification-service/template.yaml",
+                "logicalId": "Sentinels7NotificationFunction"
+            },
+            "api": {
+                "path": "/hello",
+                "httpMethod": "get",
+                "payload": {
+                    "json": {}
+                }
+            },
+            "lambda": {
+                "runtime": "python3.8"
+            }
         }
     ]
 }
