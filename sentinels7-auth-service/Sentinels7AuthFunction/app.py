@@ -120,9 +120,13 @@ def lambda_handler(event, context):
                     }
                 )
                 device_info[file] = url
-                # Send modbus config for the device
-                device_info['read_controls_inc_holding_registers_device_full_address_only'] = get_modbus_config('read_controls_inc_holding_registers_device_full_address_only')
-                device_info['read_controls_inc_batch_address_read_range'] = get_modbus_config('read_controls_inc_batch_address_read_range')
+                if device_info['device_settings']['device_type'] == 'CX_7500':
+                    # Send modbus config for the device
+                    device_info['read_controls_inc_holding_registers_device_full_address_only'] = get_modbus_config('read_controls_inc_holding_registers_device_full_address_only')
+                    device_info['read_controls_inc_batch_address_read_range'] = get_modbus_config('read_controls_inc_batch_address_read_range')
+                elif device_info['device_settings']['device_type'] == 'VFD_X_600':
+                    # Send modbus config for the device
+                    device_info['read_vfd_x_600_address_only'] = get_modbus_config('read_vfd_x_600_address_only')
             return device_info
         return None
     
