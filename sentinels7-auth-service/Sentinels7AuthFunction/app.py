@@ -64,16 +64,21 @@ def refresh_auth(username, refresh_token):
         return None, "Unknown error"
     return resp, None
     
-def get_client_name(queried_device_id):
+def get_device_settings(queried_device_id):
     db = SentinelS7Database(None)
     # print("Device id is: '" + queried_device_id + "'")
-    query = "SELECT name FROM system_view_device_company where serial_number = '{}' limit 1".format(queried_device_id)
+    query = "SELECT name,device_type, device_type_alias, unit_number FROM system_view_device_company_device_type where serial_number = '{}' limit 1".format(queried_device_id)
     # print(query)
     client_id_row = db.get_select_query_all_results(query)
     
     if len(client_id_row) > 0:
         # print("Returning Result: " + result)
-        return client_id_row[0][0]
+        return {
+            'client_id': client_id_row[0][0],
+            'device_type': client_id_row[0][1],
+            'device_type_alias': client_id_row[0][2],
+            'unit_number': client_id_row[0][3],
+            }
     else:
         result = None
 
@@ -99,7 +104,7 @@ def lambda_handler(event, context):
     # Temporary way returns client_name and cert urls based on device id to the device. This could be more secure 
     if 'device_id' in event:
         device_id = event['device_id']
-        device_info = {'client_id': get_client_name(device_id)}
+        device_info = {'device_settings': get_device_settings(device_id)}
         
         if device_info['client_id'] is not None:
             s3 = boto3.client('s3')
