@@ -8,7 +8,7 @@ from SentinelS7Database import SentinelS7Database
 
 def get_device_id_and_table_name(queried_device_name, queried_client_name):
     db = SentinelS7Database(None)
-    query = "SELECT serial_number, hypertable_name FROM system_view_device_company where alias = '{}' and name = '{}' limit 1".format(queried_device_name, queried_client_name)
+    query = "SELECT serial_number, hypertable_name FROM system_view_device_company_device_type where alias = '{}' and name = '{}' limit 1".format(queried_device_name, queried_client_name)
     device_company_row = db.get_select_query_all_results(query)
 
     if len(device_company_row) > 0:
