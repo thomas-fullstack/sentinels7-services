@@ -106,7 +106,7 @@ def lambda_handler(event, context):
         device_id = event['device_id']
         device_info = {'device_settings': get_device_settings(device_id)}
         
-        if device_info['client_id'] is not None:
+        if device_info['device_settings'] is not None:
             s3 = boto3.client('s3')
             files = ['iot-certificate.pem', 'iot-private.key', 'root-CA.crt']
             for file in files:
