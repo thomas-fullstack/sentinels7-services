@@ -105,7 +105,49 @@ def get_fleet_table_create_query(table_name):
                                             active_occurrence_count_10 BIGINT
                                             );""".format(table_name)
 
-def add_new_hyper_table(connection, table_name):
+def get_fleet_table_create_query_vfd_x_600(table_name):
+    return """CREATE TABLE IF NOT EXISTS {} (
+                                            published_at TIMESTAMPTZ NOT NULL,
+                                            device_id VARCHAR(16),
+                                            cpu_usage_percent BIGINT,
+                                            ram_usage_percent BIGINT,
+                                            gps_lat BIGINT,
+                                            gps_lon BIGINT,
+                                            cellular_signal_strength BIGINT,
+                                            cellular_career BIGINT,
+                                            modbus_active BIGINT,
+                                            supply_voltage_1 REAL,
+                                            suct_psi REAL,
+                                            disc_psi REAL,
+                                            sec_disc_psi REAL,
+                                            hz_input REAL,
+                                            manual_hz REAL,
+                                            max_pres REAL,
+                                            suc_pres_setpnt REAL,
+                                            kp REAL,
+                                            bias REAL,
+                                            working_maxpsi REAL,
+                                            flowmeter_1_flow REAL,
+                                            flowmeter_2_flow REAL,
+                                            flowmeter_1_total REAL,
+                                            flowmeter_2_total REAL,
+                                            pit_lvl_1 REAL,
+                                            pit_lvl_2 REAL,
+                                            temp_encl REAL,
+                                            hz_output REAL,
+                                            auto_mode_tog REAL,
+                                            vfd_run_relay REAL,
+                                            vfd_flt_reset_relay REAL,
+                                            vlvc_ctrl REAL,
+                                            ambr_litrelay REAL,
+                                            vfd_fault_di REAL,
+                                            vfd_run_di REAL,
+                                            vlv_closed REAL,
+                                            vlv_open REAL,
+                                            on_backup REAL
+                                            );""".format(table_name)
+
+def add_new_hyper_table(connection, table_name, vfd_x_600_hyper_table_name):
     cursor = connection.cursor()
 
     # create fleet hypertable
@@ -122,35 +164,51 @@ def add_new_hyper_table(connection, table_name):
     cursor.execute(query_index_published_at_device_id_hypertable)
     print("Creating Index for device_id on : {}".format(table_name))
     cursor.execute(query_index_device_id_hypertable)
-    cursor.close()
-    print("{} created successfully!".format(table_name))
 
-def add_system_company(connection, table_name, company_name):
+    # create fleet hypertable for VFD X 600
+    query_create_table = get_fleet_table_create_query_vfd_x_600(vfd_x_600_hyper_table_name)
+    query_create_hypertable = "SELECT create_hypertable('{}', 'published_at');".format(vfd_x_600_hyper_table_name)
+    query_index_published_at_device_id_hypertable = "CREATE INDEX ON {} (device_id, published_at DESC);".format(vfd_x_600_hyper_table_name)
+    query_index_device_id_hypertable = "CREATE INDEX ON {} (device_id);".format(vfd_x_600_hyper_table_name)
+
+    print("Creating Table : {}".format(vfd_x_600_hyper_table_name))
+    cursor.execute(query_create_table)
+    print("Making it Hyper Table : {}".format(vfd_x_600_hyper_table_name))
+    cursor.execute(query_create_hypertable)
+    print("Creating Index for device_id + published_at on : {}".format(vfd_x_600_hyper_table_name))
+    cursor.execute(query_index_published_at_device_id_hypertable)
+    print("Creating Index for device_id on : {}".format(vfd_x_600_hyper_table_name))
+    cursor.execute(query_index_device_id_hypertable)
+
+    cursor.close()
+    print("{} created successfully!".format(vfd_x_600_hyper_table_name))
+
+def add_system_company(connection, table_name, vfd_x_600_hyper_table_name, company_name):
     cursor = connection.cursor()
     print("Inserting new row to : {}".format(table_name))
-    query = "INSERT INTO public.system_company(id, name, hypertable_name) VALUES (nextval('system_company_id_seq'), %s, %s);"
-    values = (company_name, table_name)
+    query = "INSERT INTO public.system_company(id, name, hypertable_name, vfd_x_600_hyper_table_name) VALUES (nextval('system_company_id_seq'), %s, %s, %s);"
+    values = (company_name, table_name, vfd_x_600_hyper_table_name)
     cursor.execute(query, values)
     cursor.close()
     print("{} Inserted row successfully!".format(table_name))
 
 def add_system_user_app_config_contact(connection, company_name, email, phone_numbers, user_is_admin):
     cursor = connection.cursor()
-    get_table_name_query = "SELECT id,hypertable_name from system_company where name = '{}';".format(company_name)
+    get_table_name_query = "SELECT id from system_company where name = '{}';".format(company_name)
     cursor.execute(get_table_name_query)
     result = cursor.fetchall()
     if result and result[0] and result[0][0]:
         # print(result)
         company_id = result[0][0]
-        table_name = result[0][1]
+        # table_name = result[0][1]
         # print(table_name)
 
-        print("Inserting new row to : {}".format(table_name))
+        print("Inserting new row to : system_user")
         query = "INSERT INTO public.system_user(id, email, company_id) VALUES (nextval('user_id_seq'), %s, %s) RETURNING id;"
         values = (email, company_id)
         cursor.execute(query, values)
         new_user_id = cursor.fetchone()[0]
-        print("{} Inserted row successfully!".format(table_name))
+        print("system_user Inserted row successfully!")
 
         print("Inserting rows into : {}".format('system_user_app_config'))
         query3 = "INSERT INTO public.system_user_app_config(id, key, value, type, user_id) VALUES (nextval('user_app_config_id_seq'), 'default_device_id', %s, 'integer', %s);"
@@ -240,7 +298,7 @@ def add_system_device_and_notifications(connection, company_name, devices):
                 
     cursor.close()
 
-def add_hyper_table_retention_policy(connection, table_name, days):
+def add_hyper_table_retention_policy(connection, table_name, vfd_x_600_hyper_table_name, days):
     cursor = connection.cursor()
     print("Adding data retention policy for Table : {} as {}".format(table_name, days))
     query_hypertable = "SELECT add_retention_policy('{}', INTERVAL '{} days');".format(table_name, days)
@@ -248,11 +306,18 @@ def add_hyper_table_retention_policy(connection, table_name, days):
     cursor.close()
     print("{} Added data retention policy of {} days successfully!".format(table_name, days))
 
+    print("Adding data retention policy for Table : {} as {}".format(vfd_x_600_hyper_table_name, days))
+    query_hypertable = "SELECT add_retention_policy('{}', INTERVAL '{} days');".format(vfd_x_600_hyper_table_name, days)
+    cursor.execute(query_hypertable)
+    cursor.close()
+    print("{} Added data retention policy of {} days successfully!".format(vfd_x_600_hyper_table_name, days))
+
 def lambda_handler(event, context):
     result = None
     add_new_company= event.get('add_new_company', False)
     company_name= event.get('company_name', False)
     hyper_table_name = event.get('hyper_table_name', None)
+    vfd_x_600_hyper_table_name = event.get('vfd_x_600_hyper_table_name', None)
     data_retention_policy_in_days = event.get('data_retention_policy_in_days', None)
     add_new_user= event.get('add_new_user', False)
     email= event.get('email', None)
@@ -268,16 +333,16 @@ def lambda_handler(event, context):
     try:
         if add_new_company:
             print("Running add_new_hyper_table")
-            add_new_hyper_table(admin_conn, hyper_table_name)
+            add_new_hyper_table(admin_conn, hyper_table_name, vfd_x_600_hyper_table_name)
             print("Finished Running add_new_hyper_table")
 
-            print("Running add_hyper_table_retention_policy")
-            add_hyper_table_retention_policy(admin_conn, hyper_table_name, data_retention_policy_in_days)
-            print("Finished Running add_hyper_table_retention_policy")
+            # print("Running add_hyper_table_retention_policy")
+            add_hyper_table_retention_policy(admin_conn, hyper_table_name, vfd_x_600_hyper_table_name, data_retention_policy_in_days)
+            # print("Finished Running add_hyper_table_retention_policy")
 
-            print("Running add_system_company")
-            add_system_company(admin_conn, hyper_table_name, company_name)
-            print("Finished Running add_system_company")
+            # print("Running add_system_company")
+            add_system_company(admin_conn, hyper_table_name, vfd_x_600_hyper_table_name, company_name)
+            # print("Finished Running add_system_company")
 
         if add_new_user:
             print("Running add_system_user_app_config_contact")

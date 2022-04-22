@@ -1,0 +1,12 @@
+{
+  "published_at": "2021-1-1T22:42:59.719436Z",
+  "device_id": "2044SBI18711",
+  "cpu_usage_percent": 98,
+  "ram_usage_percent": 52,
+  "gps_lat": 999,
+  "gps_lon": -999,
+  "cellular_signal_strength": -999,
+  "cellular_career": -999,
+  "modbus_active": 0,
+  "table_name": "dev_ternstar_vfd_x_600_fleet"
+}
