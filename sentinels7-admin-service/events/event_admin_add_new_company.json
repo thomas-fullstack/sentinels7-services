@@ -1,6 +1,7 @@
 {
 "add_new_company": true,
 "hyper_table_name": "dev_ternstar_fleet_2",
+"vfd_x_600_hyper_table_name": "dev_ternstar_vfd_x_600_fleet",
 "data_retention_policy_in_days": "7",
 "company_name": "dev_ternstar_company_2"
 }
