@@ -15,15 +15,19 @@ class DecimalEncoder(json.JSONEncoder):
             return int(obj)
         return super(DecimalEncoder, self).default(obj)
         
-def get_device_id_and_table_name(queried_device_name, queried_client_name):
+def get_device_id_device_type_and_table_name(queried_device_name, queried_client_name):
     db = SentinelS7Database(None)
-    query = "SELECT serial_number, hypertable_name FROM system_view_device_company_device_type where alias = '{}' and name = '{}' limit 1".format(queried_device_name, queried_client_name)
+    query = "SELECT serial_number, hypertable_name, vfd_x_600_hyper_table_name, device_type FROM system_view_device_company_device_type where alias = '{}' and name = '{}' limit 1".format(queried_device_name, queried_client_name)
     device_company_row = db.get_select_query_all_results(query)
 
     if len(device_company_row) > 0:
         device_id = device_company_row[0][0]
-        table_name = device_company_row[0][1]
-        result = [device_id, table_name]
+        device_type = device_company_row[0][3]
+        if device_type == 'VFD_X_600':
+            table_name = device_company_row[0][2]
+        else: 
+            table_name = device_company_row[0][1]
+        result = [device_id, table_name, device_type]
         return result
     else:
         return []
@@ -38,6 +42,24 @@ def get_multiple_device_ids_and_table_name(queried_devices_alias_list, queried_c
     else:
         return []
 
+def send_device_commands(queried_device_name, queried_client_name, command_json):
+    result=None
+    device_id_device_type_and_table_name = get_device_id_device_type_and_table_name(queried_device_name, queried_client_name)
+    
+    if len(device_id_device_type_and_table_name) == 3:
+        client = boto3.client('iot-data', region_name='us-east-1', verify=False)
+        response =  client.publish(
+                    # topic='ternstar_company/send_device_commands/10000000d92ef835',
+                    # topic='ternstar_company/send_device_commands/10000000a3dd89be',
+                    topic='{}/send_device_commands/{}'.format(queried_client_name, device_id_device_type_and_table_name[0]),
+                    qos=1,
+                    payload=json.dumps(command_json)
+                    )
+        result=response
+    else:
+        result=None
+    return result
+
 def lambda_handler(event, context):
     result = 'Hello from Lambda!'
     if event is not None:
@@ -45,121 +67,71 @@ def lambda_handler(event, context):
         print(event)
         # Start Engine
         if event.get('engine_start', False) and event.get('device_name', False) and event.get('client_name', False):
-            queried_device_name = event.get('device_name', False)
-            queried_client_name = event.get('client_name', False)
-            device_id_and_table_name = get_device_id_and_table_name(queried_device_name, queried_client_name)
-            
-            if len(device_id_and_table_name) == 2:
-                client = boto3.client('iot-data', region_name='us-east-1', verify=False)
-                response =  client.publish(
-                            # topic='ternstar_company/send_device_commands/10000000d92ef835',
-                            # topic='ternstar_company/send_device_commands/10000000a3dd89be',
-                            topic='{}/send_device_commands/{}'.format(queried_client_name, device_id_and_table_name[0]),
-                            qos=1,
-                            payload=json.dumps({
-                                "property": "engine",
-                                "value": "start"
-                            })
-                            )
-                result= response
-            else:
-                result=None
+            command_json = {
+                    "property": "engine",
+                    "value": "start"
+                }
+            result= send_device_commands(
+                event.get('device_name', False),
+                event.get('client_name', False),
+                command_json
+                )
         # Stop Engine
         elif event.get('engine_stop', False) and event.get('device_name', False) and event.get('client_name', False):
-            queried_device_name = event.get('device_name', False)
-            queried_client_name = event.get('client_name', False)
-            device_id_and_table_name = get_device_id_and_table_name(queried_device_name, queried_client_name)
-            
-            if len(device_id_and_table_name) == 2:
-                client = boto3.client('iot-data', region_name='us-east-1', verify=False)
-                response =  client.publish(
-                            # topic='ternstar_company/send_device_commands/10000000d92ef835',
-                            # topic='ternstar_company/send_device_commands/10000000a3dd89be',
-                            topic='{}/send_device_commands/{}'.format(queried_client_name, device_id_and_table_name[0]),
-                            qos=1,
-                            payload=json.dumps({
-                                "property": "engine",
-                                "value": "stop"
-                            })
-                            )
-                result= response
-            else:
-                result=None
+            command_json = {
+                        "property": "engine",
+                        "value": "stop"
+                    }
+            result= send_device_commands(
+                event.get('device_name', False),
+                event.get('client_name', False),
+                command_json
+                )
         # Start Feed
         elif event.get('feed_start', False) and event.get('device_name', False) and event.get('client_name', False):
-            queried_device_name = event.get('device_name', False)
-            queried_client_name = event.get('client_name', False)
-            device_id_and_table_name = get_device_id_and_table_name(queried_device_name, queried_client_name)
-            
-            if len(device_id_and_table_name) == 2:
-                client = boto3.client('iot-data', region_name='us-east-1', verify=False)
-                response =  client.publish(
-                            # topic='ternstar_company/send_device_commands/10000000d92ef835',
-                            #topic='ternstar_company/send_device_commands/10000000a3dd89be',
-                            topic='{}/send_device_commands/{}'.format(queried_client_name, device_id_and_table_name[0]),
-                            qos=1,
-                            payload=json.dumps({
-                                "property": "feed",
-                                "value": "start"
-                            })
-                            )
-                result= response
-            else:
-                result=None
+            command_json = {
+                        "property": "feed",
+                        "value": "start"
+                    }
+            result= send_device_commands(
+                event.get('device_name', False),
+                event.get('client_name', False),
+                command_json
+                )
         # Stop Feed
         elif event.get('feed_stop', False) and event.get('device_name', False) and event.get('client_name', False):
-            queried_device_name = event.get('device_name', False)
-            queried_client_name = event.get('client_name', False)
-            device_id_and_table_name = get_device_id_and_table_name(queried_device_name, queried_client_name)
-            
-            if len(device_id_and_table_name) == 2:
-                client = boto3.client('iot-data', region_name='us-east-1', verify=False)
-                response =  client.publish(
-                            # topic='ternstar_company/send_device_commands/10000000d92ef835',
-                            # topic='ternstar_company/send_device_commands/10000000a3dd89be',
-                            topic='{}/send_device_commands/{}'.format(queried_client_name, device_id_and_table_name[0]),
-                            qos=1,
-                            payload=json.dumps({
-                                "property": "feed",
-                                "value": "stop"
-                            })
-                            )
-                result= response
-            else:
-                result=None
+            command_json = {
+                            "property": "feed",
+                            "value": "stop"
+                        }
+            result= send_device_commands(
+                event.get('device_name', False),
+                event.get('client_name', False),
+                command_json
+                )
         # Set Engine RPM
         elif event.get('engine_speed', False) and event.get('device_name', False) and event.get('client_name', False):
-            queried_device_name = event.get('device_name', False)
-            queried_client_name = event.get('client_name', False)
-            device_id_and_table_name = get_device_id_and_table_name(queried_device_name, queried_client_name)
-            
-            if len(device_id_and_table_name) == 2:
-                client = boto3.client('iot-data', region_name='us-east-1', verify=False)
-                response =  client.publish(
-                            # topic='ternstar_company/send_device_commands/10000000d92ef835',
-                            # topic='ternstar_company/send_device_commands/10000000a3dd89be',
-                            topic='{}/send_device_commands/{}'.format(queried_client_name, device_id_and_table_name[0]),
-                            qos=1,
-                            payload=json.dumps({
-                                "property": "engine_speed",
-                                "value": event.get('engine_speed')
-                            })
-                            )
-                result= response
-            else:
-                result=None
+            command_json = {
+                            "property": "engine_speed",
+                            "value": event.get('engine_speed')
+                        }
+            result= send_device_commands(
+                event.get('device_name', False),
+                event.get('client_name', False),
+                command_json
+                )
         # Get Feed Item by device_name and client_name (Normal Main Feed Query to DB)
         elif event.get('device_name', False) and event.get('client_name', False):
             queried_device_name = event.get('device_name', False)
             queried_client_name = event.get('client_name', False)
-            device_id_and_table_name = get_device_id_and_table_name(queried_device_name, queried_client_name)
+            device_id_device_type_and_table_name = get_device_id_device_type_and_table_name(queried_device_name, queried_client_name)
                         
-            if len(device_id_and_table_name) == 2:
-                print(device_id_and_table_name[0])
-                print(device_id_and_table_name[1])
+            if len(device_id_device_type_and_table_name) == 3:
+                # print(device_id_and_table_name[0])
+                # print(device_id_and_table_name[1])
                 query_device_timescale = QueryDeviceTimescale(None)
                 start_time = time.time()
-                response = query_device_timescale.run_device_query(device_id_and_table_name[0], device_id_and_table_name[1])
+                response = query_device_timescale.run_device_query(device_id_device_type_and_table_name[0], device_id_device_type_and_table_name[1], device_id_device_type_and_table_name[2])
                 end_time = time.time()
                 print("--- %s seconds ---" % (end_time - start_time))
                 result= response
