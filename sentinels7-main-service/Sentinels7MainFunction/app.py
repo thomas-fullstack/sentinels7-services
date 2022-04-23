@@ -220,7 +220,7 @@ def lambda_handler(event, context):
             #     if feed_item != None:
             #         feed_item.pop('device_id', None)
             overview_fields_controls_inc = ['GPS Latitude', 'GPS Longitude', 'Engine Hours', 'Fuel Rate', 'Key Position', 'Inlet Pressure', 'Control Transducer Level', 'Flow Rate', 'Engine Speed', 'Outlet Pressure 1', 'Battery Voltage', 'Engine Coolant Temp', 'Engine Oil Pressure', 'Fuel Level', 'Amber Warning Lamp', 'Red Stop Lamp']
-            overview_fields_vfd_x_600 = ['GPS Latitude', 'GPS Longitude']
+            overview_fields_vfd_x_600 = ['GPS Latitude', 'GPS Longitude', 'Amber Warning Lamp', 'Red Stop Lamp', 'VFD Start/Stop' , 'Auto Mode', 'VFD Hz Input Signal', 'Suction Pressure', 'Discharge Pressure', '2nd Discharge Pressure', 'Meter 1 Rate', 'Meter 1 Grand Totalizer']
             result = {
                 'cx_7500': {
                     'overview_fields' : overview_fields_controls_inc,
