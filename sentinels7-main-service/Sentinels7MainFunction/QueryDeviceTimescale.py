@@ -173,16 +173,37 @@ class QueryDeviceTimescale:
         for register in device_results_formatted_json['holding_registers']:
             if register['value'] == -999.999:
                     register['value'] = "Not Available"
+            if register['unit'] == "Boolean":
+                if register['value'] == 0:
+                    register['value'] = "Off"
+                    register['unit'] = ""
+                elif register['value'] == 1:
+                    register['value'] = "On"
+                    register['unit'] = ""
             register = self.remove_props(register)
 
         for register in device_results_formatted_json['coils']:
             if register['value'] == -999.999:
                     register['value'] = "Not Available"
+            if register['unit'] == "Boolean":
+                if register['value'] == 0:
+                    register['value'] = "Off"
+                    register['unit'] = ""
+                elif register['value'] == 1:
+                    register['value'] = "On"
+                    register['unit'] = ""
             register = self.remove_props(register)
 
         for register in device_results_formatted_json['discrete_inputs']:
             if register['value'] == -999.999:
                     register['value'] = "Not Available"
+            if register['unit'] == "Boolean":
+                if register['value'] == 0:
+                    register['value'] = "Off"
+                    register['unit'] = ""
+                elif register['value'] == 1:
+                    register['value'] = "On"
+                    register['unit'] = ""
             register = self.remove_props(register)
         
         return device_results_formatted_json
