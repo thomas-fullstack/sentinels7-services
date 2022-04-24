@@ -120,6 +120,72 @@ def lambda_handler(event, context):
                 event.get('client_name', False),
                 command_json
                 )
+        # Start Motor
+        elif event.get('motor_start', False) and event.get('device_name', False) and event.get('client_name', False):
+            command_json = {
+                            "property": "motor",
+                            "value": "start"
+                        }
+            result= send_device_commands(
+                event.get('device_name', False),
+                event.get('client_name', False),
+                command_json
+                )
+        # Stop Motor
+        elif event.get('motor_stop', False) and event.get('device_name', False) and event.get('client_name', False):
+            command_json = {
+                            "property": "motor",
+                            "value": "stop"
+                        }
+            result= send_device_commands(
+                event.get('device_name', False),
+                event.get('client_name', False),
+                command_json
+                )
+        # Set Motor Hz
+        elif event.get('motor_speed', False) and event.get('device_name', False) and event.get('client_name', False):
+            command_json = {
+                            "property": "motor_speed",
+                            "value": event.get('motor_speed')
+                        }
+            result= send_device_commands(
+                event.get('device_name', False),
+                event.get('client_name', False),
+                command_json
+                )
+        # Set Target Setpoint
+        elif event.get('target_setpoint', False) and event.get('device_name', False) and event.get('client_name', False):
+            command_json = {
+                            "property": "target_setpoint",
+                            "value": event.get('target_setpoint')
+                        }
+            result= send_device_commands(
+                event.get('device_name', False),
+                event.get('client_name', False),
+                command_json
+                )
+        # Set high_pressure_limit
+        elif event.get('high_pressure_limit', False) and event.get('device_name', False) and event.get('client_name', False):
+            command_json = {
+                            "property": "high_pressure_limit",
+                            "value": event.get('high_pressure_limit')
+                        }
+            result= send_device_commands(
+                event.get('device_name', False),
+                event.get('client_name', False),
+                command_json
+                )
+        # Set high_pressure_shutdown
+        elif event.get('high_pressure_shutdown', False) and event.get('device_name', False) and event.get('client_name', False):
+            command_json = {
+                            "property": "high_pressure_shutdown",
+                            "value": event.get('high_pressure_shutdown')
+                        }
+            result= send_device_commands(
+                event.get('device_name', False),
+                event.get('client_name', False),
+                command_json
+                )
         # Get Feed Item by device_name and client_name (Normal Main Feed Query to DB)
         elif event.get('device_name', False) and event.get('client_name', False):
             queried_device_name = event.get('device_name', False)
