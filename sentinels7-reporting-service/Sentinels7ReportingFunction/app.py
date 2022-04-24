@@ -8,12 +8,17 @@ from SentinelS7Database import SentinelS7Database
 
 def get_device_id_and_table_name(queried_device_name, queried_client_name):
     db = SentinelS7Database(None)
-    query = "SELECT serial_number, hypertable_name FROM system_view_device_company_device_type where alias = '{}' and name = '{}' limit 1".format(queried_device_name, queried_client_name)
+    query = "SELECT serial_number, hypertable_name, vfd_x_600_hyper_table_name, device_type FROM system_view_device_company_device_type where alias = '{}' and name = '{}' limit 1".format(queried_device_name, queried_client_name)
     device_company_row = db.get_select_query_all_results(query)
 
     if len(device_company_row) > 0:
         device_id = device_company_row[0][0]
-        table_name = device_company_row[0][1]
+        device_type = device_company_row[0][3]
+        if device_type == 'VFD_X_600':
+            table_name = device_company_row[0][2]
+        else: # assume its control's inc
+            table_name = device_company_row[0][1]
+        
         result = [device_id, table_name]
         return result
     else:
