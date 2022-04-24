@@ -153,6 +153,28 @@ def lambda_handler(event, context):
                 event.get('client_name', False),
                 command_json
                 )
+        # Auto Mode
+        elif event.get('auto_mode', False) and event.get('device_name', False) and event.get('client_name', False):
+            command_json = {
+                            "property": "auto",
+                            "value": "true"
+                        }
+            result= send_device_commands(
+                event.get('device_name', False),
+                event.get('client_name', False),
+                command_json
+                )
+                # Manual Mode
+        elif event.get('manual_mode', False) and event.get('device_name', False) and event.get('client_name', False):
+            command_json = {
+                            "property": "manual",
+                            "value": "true"
+                        }
+            result= send_device_commands(
+                event.get('device_name', False),
+                event.get('client_name', False),
+                command_json
+                )
         # Set Target Setpoint
         elif event.get('target_setpoint', False) and event.get('device_name', False) and event.get('client_name', False):
             command_json = {
