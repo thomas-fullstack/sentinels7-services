@@ -164,10 +164,21 @@ def lambda_handler(event, context):
                 event.get('client_name', False),
                 command_json
                 )
-                # Manual Mode
+        # Manual Mode
         elif event.get('manual_mode', False) and event.get('device_name', False) and event.get('client_name', False):
             command_json = {
                             "property": "manual",
+                            "value": "true"
+                        }
+            result= send_device_commands(
+                event.get('device_name', False),
+                event.get('client_name', False),
+                command_json
+                )
+        # Fault Reset
+        elif event.get('fault_reset', False) and event.get('device_name', False) and event.get('client_name', False):
+            command_json = {
+                            "property": "fault_reset",
                             "value": "true"
                         }
             result= send_device_commands(
