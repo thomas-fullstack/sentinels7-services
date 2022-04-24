@@ -36,8 +36,6 @@ def lambda_handler(event, context):
     input_data_json = event
     table_name = event['table_name']
     modbus_active = event['modbus_active']
-    print("Event is: ")
-    print(event)
     
     db_insert = SentinelS7Database(None)
     db_insert_conn = db_insert.get_db_connection()
