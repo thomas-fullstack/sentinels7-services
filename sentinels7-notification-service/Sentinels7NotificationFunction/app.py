@@ -212,6 +212,15 @@ def check_operator(register_value, alarm_expected_value, alarm_operator):
         result = True
     if alarm_operator == '<=' and register_value <= alarm_expected_value:
         result = True
+    if alarm_operator == '==' and register_value == alarm_expected_value:
+        result = True
+    if alarm_operator == 'in':
+        # Convert comma separated string to a list
+        alarm_expected_values = alarm_expected_value.split(",")
+        # Cast list of strings to list of ints
+        alarm_expected_values = [int(numeric_string) for numeric_string in alarm_expected_values]
+        if register_value in alarm_expected_values:
+            result = True
     return result
 
 def get_user_friendly_value(field_name, feed_item_value):
@@ -226,8 +235,27 @@ def get_user_friendly_value(field_name, feed_item_value):
             result = "Off"
         elif feed_item_value == 1:
             result = "On, Solid"
-        elif feed_item_value == 1:
+        elif feed_item_value == 2:
             result = "On, Flashing"
+    
+    # If field_name belongs to one of the fields that are coming in as enum
+    # Return "Engine Off" for all alarm equivalent 1, 2, 25, 26, 28 states
+    if field_name == "auto_start_state":
+        result = "Engine Off"
+    return result
+
+def get_user_friendly_value_x_600(field_name, feed_item_value):
+    # By default return the same value as a string
+    result = str(feed_item_value)
+    # These fields from the feed are all coming in as enum
+    enum_fields = ['vfd_fault_di', 'ambr_litrelay']
+    # If field_name belongs to one of the fields that are coming in as enum
+    # Return the casted enum user friendly result
+    if field_name in enum_fields:
+        if feed_item_value == 0:
+            result = "Off"
+        elif feed_item_value == 1:
+            result = "On"
     return result
     
 def set_alarm_flags_and_send_notifications(device_id, user_devices_info, sms_numbers, alarm_fields, allFeedData, device_alarms_notification_status):
@@ -240,7 +268,12 @@ def set_alarm_flags_and_send_notifications(device_id, user_devices_info, sms_num
             # print(field["field_name"])
             if field["field_name"] in allFeedData:
                 feed_item_value = allFeedData[field["field_name"]]
-                user_friendly_feed_item_value = get_user_friendly_value(field["field_name"], feed_item_value)
+                if user_devices_info['device_type'] == 'VFD_X_600':
+                    user_friendly_feed_item_value = get_user_friendly_value_x_600(field["field_name"], feed_item_value)
+                else: # Assume it's CX_7500
+                    user_friendly_feed_item_value = get_user_friendly_value(field["field_name"], feed_item_value)
+                if field["value_type"] == "int":
+                    field["expected_value"] = int(field["expected_value"])
                 if check_operator(feed_item_value, field["expected_value"], field["operator"]):
                     messageBody = "WARNING: \n {} is: {} \n Device Name: {} \n Company Name: {}".format(str(field["alias_field"]), str(user_friendly_feed_item_value), user_devices_info['device_name'], user_devices_info['client_name'])
                     field["message"] = messageBody
@@ -307,7 +340,9 @@ def get_device_notification_config_by_device_serial_number(serial_number):
                 "notified": item[5],
                 "device_id": item[7],
                 "device_name": item[6],
-                "client_name": item[8]
+                "client_name": item[8],
+                "device_type": item[10],
+                "value_type": item[11],
             })
     return notification_config_rows
     
@@ -322,14 +357,16 @@ def lambda_handler(event, context):
     if len(notification_config_rows) > 0:
         user_devices_info = {
             'device_name': notification_config_rows[0]['device_name'],
-            'client_name': notification_config_rows[0]['client_name']
+            'client_name': notification_config_rows[0]['client_name'],
+            'device_type': notification_config_rows[0]['device_type']
         }
         for item in notification_config_rows:
             alarm_fields.append({
                     'expected_value': item['expected_value'],
                     'alias_field': item['alias_field'],
                     'field_name': item['field_name'],
-                    'operator': item['operator']
+                    'operator': item['operator'],
+                    'value_type': item['value_type'],
                 })
             device_alarms_notification_status.append({
                     'notified': item['notified'],
