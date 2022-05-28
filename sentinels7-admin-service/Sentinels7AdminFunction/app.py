@@ -336,13 +336,13 @@ def lambda_handler(event, context):
             add_new_hyper_table(admin_conn, hyper_table_name, vfd_x_600_hyper_table_name)
             print("Finished Running add_new_hyper_table")
 
-            # print("Running add_hyper_table_retention_policy")
+            print("Running add_hyper_table_retention_policy")
             add_hyper_table_retention_policy(admin_conn, hyper_table_name, vfd_x_600_hyper_table_name, data_retention_policy_in_days)
-            # print("Finished Running add_hyper_table_retention_policy")
+            print("Finished Running add_hyper_table_retention_policy")
 
-            # print("Running add_system_company")
+            print("Running add_system_company")
             add_system_company(admin_conn, hyper_table_name, vfd_x_600_hyper_table_name, company_name)
-            # print("Finished Running add_system_company")
+            print("Finished Running add_system_company")
 
         if add_new_user:
             print("Running add_system_user_app_config_contact")
