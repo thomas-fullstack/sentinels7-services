@@ -67,7 +67,7 @@ def refresh_auth(username, refresh_token):
 def get_device_settings(queried_device_id):
     db = SentinelS7Database(None)
     # print("Device id is: '" + queried_device_id + "'")
-    query = "SELECT name,device_type, device_type_alias, unit_number FROM system_view_device_company_device_type where serial_number = '{}' limit 1".format(queried_device_id)
+    query = "SELECT name,device_type, device_type_alias, unit_number FROM system_view_device_company_device_type_order_category_name where serial_number = '{}' limit 1".format(queried_device_id)
     # print(query)
     client_id_row = db.get_select_query_all_results(query)
     

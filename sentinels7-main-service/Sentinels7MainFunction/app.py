@@ -17,7 +17,7 @@ class DecimalEncoder(json.JSONEncoder):
         
 def get_device_id_device_type_and_table_name(queried_device_name, queried_client_name):
     db = SentinelS7Database(None)
-    query = "SELECT serial_number, hypertable_name, vfd_x_600_hyper_table_name, device_type FROM system_view_device_company_device_type where alias = '{}' and name = '{}' limit 1".format(queried_device_name, queried_client_name)
+    query = "SELECT serial_number, hypertable_name, vfd_x_600_hyper_table_name, device_type FROM system_view_device_company_device_type_order_category_name where alias = '{}' and name = '{}' limit 1".format(queried_device_name, queried_client_name)
     device_company_row = db.get_select_query_all_results(query)
 
     if len(device_company_row) > 0:
@@ -32,9 +32,9 @@ def get_device_id_device_type_and_table_name(queried_device_name, queried_client
     else:
         return []
 
-def get_multiple_device_ids_device_types_and_table_name(queried_devices_alias_list, queried_client_name):
+def get_multiple_device_ids_device_types_order_category_table_name(queried_devices_alias_list, queried_client_name):
     db = SentinelS7Database(None)
-    query = "SELECT id, serial_number, alias, hypertable_name, vfd_x_600_hyper_table_name, device_type FROM system_view_device_company_device_type where alias in ({}) and name = '{}'".format(','.join(['%s'] * len(queried_devices_alias_list)), queried_client_name)
+    query = "SELECT id, serial_number, alias, hypertable_name, vfd_x_600_hyper_table_name, device_type, order, category_name FROM system_view_device_company_device_type_order_category_name where alias in ({}) and name = '{}'".format(','.join(['%s'] * len(queried_devices_alias_list)), queried_client_name)
     devices_company = db.get_select_query_all_results_with_params(query, queried_devices_alias_list)
 
     if len(devices_company) > 0:
@@ -243,7 +243,7 @@ def lambda_handler(event, context):
             queried_client_name = event.get('client_name', False)
             
             db = SentinelS7Database(None)
-            query = "SELECT id,alias FROM system_view_device_company_device_type where name = '{}'".format(queried_client_name)
+            query = "SELECT id,alias FROM system_view_device_company_device_type_order_category_name where name = '{}'".format(queried_client_name)
             device_alias_row = db.get_select_query_all_results(query)
             devices_result = []
             devices_alias = []
@@ -256,7 +256,7 @@ def lambda_handler(event, context):
                     devices_alias.append(alias)
 
             # print(devices_alias)
-            device_ids_and_table_name = get_multiple_device_ids_device_types_and_table_name(devices_alias, queried_client_name)
+            device_ids_and_table_name = get_multiple_device_ids_device_types_order_category_table_name(devices_alias, queried_client_name)
             devices_table_name = None
             controls_inc_devices = []
             controls_inc_responses = None
@@ -268,11 +268,11 @@ def lambda_handler(event, context):
                     device_Type = items[5]
                     if device_Type == 'VFD_X_600':
                         devices_table_name = device_ids_and_table_name[0][4]
-                        device_result = {'device_id': items[0], 'device_alias': items[2], 'device_feed': None, 'device_serial': items[1], 'device_table_name': devices_table_name, 'device_type': items[5]}
+                        device_result = {'device_id': items[0], 'device_alias': items[2], 'device_feed': None, 'device_serial': items[1], 'device_table_name': devices_table_name, 'device_type': items[5], 'order': items[6], 'category_name': items[7]}
                         vfd_x_600_devices.append(device_result)
                     else: # assume controls inc
                         devices_table_name = device_ids_and_table_name[0][3]
-                        device_result = {'device_id': items[0], 'device_alias': items[2], 'device_feed': None, 'device_serial': items[1], 'device_table_name': devices_table_name, 'device_type': items[5]}
+                        device_result = {'device_id': items[0], 'device_alias': items[2], 'device_feed': None, 'device_serial': items[1], 'device_table_name': devices_table_name, 'device_type': items[5], 'order': items[6], 'category_name': items[7]}
                         controls_inc_devices.append(device_result)
             
             # print(controls_inc_devices)
@@ -333,7 +333,7 @@ def lambda_handler(event, context):
         elif event.get('client_id', False):
             db = SentinelS7Database(None)
             queried_client_id = event.get('client_id', False)
-            query = "SELECT id,alias FROM system_view_device_company_device_type where name = '{}'".format(queried_client_id)
+            query = "SELECT id,alias FROM system_view_device_company_device_type_order_category_name where name = '{}'".format(queried_client_id)
             device_alias_row = db.get_select_query_all_results(query)
 
             if len(device_alias_row) > 0:
