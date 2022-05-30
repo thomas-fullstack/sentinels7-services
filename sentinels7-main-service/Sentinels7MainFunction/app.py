@@ -34,7 +34,7 @@ def get_device_id_device_type_and_table_name(queried_device_name, queried_client
 
 def get_multiple_device_ids_device_types_order_category_table_name(queried_devices_alias_list, queried_client_name):
     db = SentinelS7Database(None)
-    query = "SELECT id, serial_number, alias, hypertable_name, vfd_x_600_hyper_table_name, device_type, order, category_name FROM system_view_device_company_device_type_order_category_name where alias in ({}) and name = '{}'".format(','.join(['%s'] * len(queried_devices_alias_list)), queried_client_name)
+    query = "SELECT id, serial_number, alias, hypertable_name, vfd_x_600_hyper_table_name, device_type, device_order, category_name FROM system_view_device_company_device_type_order_category_name where alias in ({}) and name = '{}'".format(','.join(['%s'] * len(queried_devices_alias_list)), queried_client_name)
     devices_company = db.get_select_query_all_results_with_params(query, queried_devices_alias_list)
 
     if len(devices_company) > 0:
