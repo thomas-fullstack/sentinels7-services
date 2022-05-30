@@ -1,7 +1,7 @@
 {
 "add_new_devices": true,
 "company_name": "dev_ternstar_company_2",
-"alarm_enabled_defaults": false,
+"device_type_id": 1,
 "devices": [
     {
         "serial_number": "abcd1234",

@@ -230,7 +230,7 @@ def add_system_user_app_config_contact(connection, company_name, email, phone_nu
     else:
         print("Company name not found")
 
-def add_system_device_and_notifications(connection, company_name, devices):
+def add_system_device_and_notifications(connection, company_name, devices, device_type_id):
     cursor = connection.cursor()
     get_table_name_query = "SELECT id from system_company where name = '{}';".format(company_name)
     cursor.execute(get_table_name_query)
@@ -261,8 +261,8 @@ def add_system_device_and_notifications(connection, company_name, devices):
             serial_number = device['serial_number']
             alias = device['alias']
             print("Inserting new row to : {}".format('system_device'))
-            query = "INSERT INTO public.system_device(id, serial_number, alias, company_id) VALUES (nextval('system_device_id_seq'), %s, %s, %s) RETURNING id;"
-            values = (serial_number, alias, company_id)
+            query = "INSERT INTO public.system_device(id, serial_number, alias, company_id, device_type_id) VALUES (nextval('system_device_id_seq'), %s, %s, %s, %s) RETURNING id;"
+            values = (serial_number, alias, company_id, device_type_id)
             cursor.execute(query, values)
             new_device_id = cursor.fetchone()[0]
             print("{} Inserted row successfully!".format('system_device'))
@@ -325,6 +325,7 @@ def lambda_handler(event, context):
     user_is_admin= event.get('user_is_admin', "false")
     add_new_devices = event.get('add_new_devices', False)
     devices = event.get('devices', [])
+    device_type_id = event.get('device_type_id', 1)
     # print(event)
     
     admin = SentinelS7Database(None)
@@ -351,7 +352,7 @@ def lambda_handler(event, context):
 
         if add_new_devices:
             print("Running add_system_device")
-            add_system_device_and_notifications(admin_conn,company_name, devices)
+            add_system_device_and_notifications(admin_conn,company_name, devices, device_type_id)
             print("Finished Running add_system_device")
 
         result = True
