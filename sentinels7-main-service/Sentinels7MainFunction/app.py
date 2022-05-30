@@ -268,11 +268,11 @@ def lambda_handler(event, context):
                     device_Type = items[5]
                     if device_Type == 'VFD_X_600':
                         devices_table_name = device_ids_and_table_name[0][4]
-                        device_result = {'device_id': items[0], 'device_alias': items[2], 'device_feed': None, 'device_serial': items[1], 'device_table_name': devices_table_name, 'device_type': items[5], 'order': items[6], 'category_name': items[7]}
+                        device_result = {'device_id': items[0], 'device_alias': items[2], 'device_feed': None, 'device_serial': items[1], 'device_table_name': devices_table_name, 'device_type': items[5], 'device_order': items[6], 'category_name': items[7]}
                         vfd_x_600_devices.append(device_result)
                     else: # assume controls inc
                         devices_table_name = device_ids_and_table_name[0][3]
-                        device_result = {'device_id': items[0], 'device_alias': items[2], 'device_feed': None, 'device_serial': items[1], 'device_table_name': devices_table_name, 'device_type': items[5], 'order': items[6], 'category_name': items[7]}
+                        device_result = {'device_id': items[0], 'device_alias': items[2], 'device_feed': None, 'device_serial': items[1], 'device_table_name': devices_table_name, 'device_type': items[5], 'device_order': items[6], 'category_name': items[7]}
                         controls_inc_devices.append(device_result)
             
             # print(controls_inc_devices)
