@@ -26,6 +26,13 @@
                 "value_type": "string",
                 "alarm_alias_field_name": "auto_start_state",
                 "alarm_enabled": false
+            },
+            {
+                "expected_value": "30", 
+                "operator": "<=", 
+                "value_type": "int",
+                "alarm_alias_field_name": "def_tank_level",
+                "alarm_enabled": false
             }],
         "notify_user_emails": ["engineering@ternstartech.com"]
     },
