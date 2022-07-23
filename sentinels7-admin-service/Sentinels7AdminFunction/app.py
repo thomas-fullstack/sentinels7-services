@@ -260,12 +260,28 @@ def add_system_device_and_notifications(connection, company_name, devices, devic
         for device in devices:
             serial_number = device['serial_number']
             alias = device['alias']
+            category_name = device['category_name']
+            order = device['order']
             print("Inserting new row to : {}".format('system_device'))
             query = "INSERT INTO public.system_device(id, serial_number, alias, company_id, device_type_id) VALUES (nextval('system_device_id_seq'), %s, %s, %s, %s) RETURNING id;"
             values = (serial_number, alias, company_id, device_type_id)
             cursor.execute(query, values)
             new_device_id = cursor.fetchone()[0]
             print("{} Inserted row successfully!".format('system_device'))
+
+            # Add device to category
+            print("Inserting new row to : {}".format('system_device_category'))
+            query = "INSERT INTO public.system_device_category(id, device_id, category_name) VALUES (nextval('system_device_category_id_seq'), %s, %s);"
+            values = (new_device_id, category_name)
+            cursor.execute(query, values)
+            print("{} Inserted row successfully!".format('system_device_category'))
+
+            # Add device to order
+            print("Inserting new row to : {}".format('system_device_order'))
+            query = "INSERT INTO public.system_device_order(id, device_id, device_order) VALUES (nextval('system_device_order_id_seq'), %s, %s);"
+            values = (new_device_id, order)
+            cursor.execute(query, values)
+            print("{} Inserted row successfully!".format('system_device_order'))
             
             for alarm in device['alarms']:
                 print("Inserting new row to : {}".format('system_device_alarm_field'))
