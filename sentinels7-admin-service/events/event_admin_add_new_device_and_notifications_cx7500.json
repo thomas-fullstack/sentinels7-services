@@ -1,11 +1,13 @@
 {
 "add_new_devices": true,
-"company_name": "dev_ternstar_company_2",
+"company_name": "company_name",
 "device_type_id": 1,
 "devices": [
     {
-        "serial_number": "abcd1234",
-        "alias": "Ternstar Dev 0000",
+        "serial_number": "abc123",
+        "alias": "Device 1",
+        "order": 0,
+        "category_name": "Devices",
         "alarms": [{
             "expected_value": "0", 
             "operator": "!=", 
@@ -32,32 +34,6 @@
                 "operator": "<=", 
                 "value_type": "int",
                 "alarm_alias_field_name": "def_tank_level",
-                "alarm_enabled": false
-            }],
-        "notify_user_emails": ["engineering@ternstartech.com"]
-    },
-    {
-        "serial_number": "abcd1235",
-        "alias": "Ternstar Dev 1000",
-        "alarms": [{
-            "expected_value": "0", 
-            "operator": "!=", 
-            "value_type": "int",
-            "alarm_alias_field_name": "stop_red_lamp_state",
-            "alarm_enabled": false
-            },
-            {
-                "expected_value": "0", 
-                "operator": "!=", 
-                "value_type": "int",
-                "alarm_alias_field_name": "warning_amber_lamp_state",
-                "alarm_enabled": false
-            },
-            {
-                "expected_value": "1,2,25,26,28", 
-                "operator": "in", 
-                "value_type": "string",
-                "alarm_alias_field_name": "auto_start_state",
                 "alarm_enabled": false
             }],
         "notify_user_emails": ["engineering@ternstartech.com"]

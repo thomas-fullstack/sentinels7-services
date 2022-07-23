@@ -1,0 +1,28 @@
+{
+"add_new_devices": true,
+"company_name": "company_name",
+"device_type_id": 2,
+"devices": [
+    {
+        "serial_number": "abc123",
+        "alias": "Device 1",
+        "order": 0,
+        "category_name": "Devices",
+        "alarms": [{
+            "expected_value": "1", 
+            "operator": "==", 
+            "value_type": "int",
+            "alarm_alias_field_name": "vfd_fault_di",
+            "alarm_enabled": false
+            },
+            {
+                "expected_value": "1", 
+                "operator": "==", 
+                "value_type": "int",
+                "alarm_alias_field_name": "ambr_litrelay",
+                "alarm_enabled": false
+            }],
+        "notify_user_emails": ["engineering@ternstartech.com"]
+    }
+]
+}
