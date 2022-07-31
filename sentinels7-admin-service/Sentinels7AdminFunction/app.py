@@ -319,7 +319,6 @@ def add_hyper_table_retention_policy(connection, table_name, vfd_x_600_hyper_tab
     print("Adding data retention policy for Table : {} as {}".format(table_name, days))
     query_hypertable = "SELECT add_retention_policy('{}', INTERVAL '{} days');".format(table_name, days)
     cursor.execute(query_hypertable)
-    cursor.close()
     print("{} Added data retention policy of {} days successfully!".format(table_name, days))
 
     print("Adding data retention policy for Table : {} as {}".format(vfd_x_600_hyper_table_name, days))
