@@ -67,7 +67,7 @@ def refresh_auth(username, refresh_token):
 def get_device_settings(queried_device_id):
     db = SentinelS7Database(None)
     # print("Device id is: '" + queried_device_id + "'")
-    query = "SELECT name,device_type, device_type_alias, unit_number FROM system_view_device_company_device_type_order_category_name where serial_number = '{}' limit 1".format(queried_device_id)
+    query = "SELECT name,device_type, device_type_alias, unit_number, latitude, longitude FROM system_view_device_company_device_type_order_category_name where serial_number = '{}' limit 1".format(queried_device_id)
     # print(query)
     client_id_row = db.get_select_query_all_results(query)
     
@@ -78,6 +78,8 @@ def get_device_settings(queried_device_id):
             'device_type': client_id_row[0][1],
             'device_type_alias': client_id_row[0][2],
             'unit_number': client_id_row[0][3],
+            'latitude': client_id_row[0][4],
+            'longitude': client_id_row[0][5],
             }
     else:
         result = None
