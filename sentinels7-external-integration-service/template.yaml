@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sentinels7-external-integration-service
+
+  Sample SAM Template for sentinels7-external-integration-service
+  
+Parameters:
+  Env:
+    Type: String
+  SENTINELS7VAR1:
+    Type: String
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 10
+
+Resources:
+  Sentinels7ExternalIntegrationFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: !Sub "${Env}-sentinels7-external-integration-service"
+      CodeUri: Sentinels7ExternalIntegrationFunction/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /data
+            Method: get
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          SENTINELS7VAR1: !Sub "${SENTINELS7VAR1}"
+
+          #SENTINELS7DBCONNECTIONSTRING: !Sub "${SENTINELS7DBCONNECTIONSTRING}"
+
+          # Use these creds when developing locally
+          SENTINELS7DBCONNECTIONSTRING: postgres://tsdbadmin:c2lcstu5e40ne7fe@ssjtxd3mkh.pqhane35a5.tsdb.cloud.timescale.com:30475/tsdb?sslmode=require
+
+
+          # Env Var
+          # SENTINELS7VAR1: Foo
+Outputs:
+  Sentinels7ExternalIntegrationFunction:
+    Description: "SentinelS7 Lambda Function For Third Party API Integration"
+    Value: !GetAtt Sentinels7ExternalIntegrationFunction.Arn
+
