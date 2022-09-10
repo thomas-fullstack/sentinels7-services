@@ -1,6 +1,6 @@
 
 from ntpath import join
-import requests
+# import requests
 import json
 from SentinelS7Database import SentinelS7Database
 import psycopg2
@@ -19,96 +19,96 @@ def get_config_from_db(connection,device_id,table_name):
     return result
 
 
+# This is useful to seed the field config
+# def add_config_to_db(connection,device_id,table_name):
+#     print("insert  field to {table} table".format(table=table_name))
 
-def add_config_to_db(connection,device_id,table_name):
-    print("insert  field to {table} table".format(table=table_name))
-
-    aliases = {
-            "digitalIO1": {
-                "alias":"Float Position",
-                "unit":["Low","High"],
-                "order":0,
-                "type":"bool",
-                "value":""
-            },
-            "digitalIO2": {
-                "alias":"Siren/Beacon",
-                "unit":["Off","On"],
-                "type":"bool",
-                "order":1,
-                "value":""
-            },
-            "analogInput1": {
-                "alias":"Level 1",
-                "unit":"ft",
-                "type":"number",
-                "order":2,
-                "value":""
-            },
-            "analogInput2": {
-                "alias":"Level 2",
-                "unit":"ft",
-                "type":"number",
-                "order":3,
-                "value":""
-            },
-            "analogInput3":{
-                "alias":"Pressure",
-                "unit":"psi",
-                "type":"number",
-                "order":4,
-                "value":""
-            },
-            "analogInput4": {
-                "alias":"Analog Flow Rate",
-                "unit":"BPM",
-                "type":"number",
-                "order":5,
-                "value":""
-            },
-            "frequencyInput1" :{
-                "alias":"Pulse Flow Rate",
-                "unit":"BPM",
-                "type":"number",
-                "order":6,
-                "value":""
-            },
-            "vin" :{
-                "alias":"Battery Voltage",
-                "unit":"Volts",
-                "type":"number",
-                "order":7,
-                "value":""
-            },
-        }
+#     aliases = {
+#             "digitalIO1": {
+#                 "alias":"Float Position",
+#                 "unit":["Low","High"],
+#                 "order":0,
+#                 "type":"bool",
+#                 "value":""
+#             },
+#             "digitalIO2": {
+#                 "alias":"Siren/Beacon",
+#                 "unit":["Off","On"],
+#                 "type":"bool",
+#                 "order":1,
+#                 "value":""
+#             },
+#             "analogInput1": {
+#                 "alias":"Level 1",
+#                 "unit":"ft",
+#                 "type":"number",
+#                 "order":2,
+#                 "value":""
+#             },
+#             "analogInput2": {
+#                 "alias":"Level 2",
+#                 "unit":"ft",
+#                 "type":"number",
+#                 "order":3,
+#                 "value":""
+#             },
+#             "analogInput3":{
+#                 "alias":"Pressure",
+#                 "unit":"psi",
+#                 "type":"number",
+#                 "order":4,
+#                 "value":""
+#             },
+#             "analogInput4": {
+#                 "alias":"Analog Flow Rate",
+#                 "unit":"BPM",
+#                 "type":"number",
+#                 "order":5,
+#                 "value":""
+#             },
+#             "frequencyInput1" :{
+#                 "alias":"Pulse Flow Rate",
+#                 "unit":"BPM",
+#                 "type":"number",
+#                 "order":6,
+#                 "value":""
+#             },
+#             "vin" :{
+#                 "alias":"Battery Voltage",
+#                 "unit":"Volts",
+#                 "type":"number",
+#                 "order":7,
+#                 "value":""
+#             },
+#         }
 
 
 
    
-    result = get_config_from_db(connection,device_id,table_name)
+#     result = get_config_from_db(connection,device_id,table_name)
 
-    aliasKeys = list(aliases.keys())
-    cursor = connection.cursor()
+#     aliasKeys = list(aliases.keys())
+#     cursor = connection.cursor()
 
-    for row in result:
-        aliasName = row[1]
-        if aliasName in aliases.keys():
-            aliasKeys.remove(aliasName)
+#     for row in result:
+#         aliasName = row[1]
+#         if aliasName in aliases.keys():
+#             aliasKeys.remove(aliasName)
 
 
-    for key in aliasKeys:
-        data =aliases[key]
-        unit=data['unit']
-        if(isinstance(data['unit'],list)):
-            unit= ','.join(data['unit'])
+#     for key in aliasKeys:
+#         data =aliases[key]
+#         unit=data['unit']
+#         if(isinstance(data['unit'],list)):
+#             unit= ','.join(data['unit'])
         
-        query = "INSERT INTO public."+table_name+" (id,field_name, alias, unit,type,"+'"order"'+",device_id) VALUES (nextval('system_external_cbw_field_id_seq'),%s, %s, %s, %s,%s,%s)"
-        values = (key,data['alias'],unit,data['type'],data['order'],device_id)
-        cursor.execute(query, values)
+#         query = "INSERT INTO public."+table_name+" (id,field_name, alias, unit,type,"+'"order"'+",device_id) VALUES (nextval('system_external_cbw_field_id_seq'),%s, %s, %s, %s,%s,%s)"
+#         values = (key,data['alias'],unit,data['type'],data['order'],device_id)
+#         cursor.execute(query, values)
 
-        print(" Inserted rows successfully!")
-    connection.commit()
-    cursor.close()
+#         print(" Inserted rows successfully!")
+#     connection.commit()
+#     cursor.close()
 
 
 def get_data(connection,device_id):
@@ -168,8 +168,6 @@ def lambda_handler(event, context):
 
     res = check_device(device_id_param,connection)
 
-    result = None
-
     if res is None:
         return {
         'statusCode': 404,
@@ -178,7 +176,7 @@ def lambda_handler(event, context):
         
     device_id=res[0]
 
-    add_config_to_db(connection,device_id,table_name)
+    # add_config_to_db(connection,device_id,table_name)
 
     data =  get_data(connection,device_id)
 
