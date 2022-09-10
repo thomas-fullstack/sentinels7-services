@@ -35,8 +35,6 @@ Resources:
         - x86_64
       Environment:
         Variables:
-          SENTINELS7VAR1: !Sub "${SENTINELS7VAR1}"
-
           SENTINELS7DBCONNECTIONSTRING: !Sub "${SENTINELS7DBCONNECTIONSTRING}"
 
           # Use these creds when developing locally
