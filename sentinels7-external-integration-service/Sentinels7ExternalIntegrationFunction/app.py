@@ -180,8 +180,5 @@ def lambda_handler(event, context):
 
     data =  get_data(connection,device_id)
 
-    return {
-        'statusCode': 200,
-        'body': json.dumps(data)
-    }
+    return data
 
