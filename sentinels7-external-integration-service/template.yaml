@@ -24,13 +24,6 @@ Resources:
       CodeUri: Sentinels7ExternalIntegrationFunction/
       Handler: app.lambda_handler
       Runtime: python3.8
-      
-      Events:
-        HelloWorld:
-          Type: Api
-          Properties:
-            Path: /data
-            Method: get
       Architectures:
         - x86_64
       Environment:
