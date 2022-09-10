@@ -28,10 +28,10 @@ Resources:
         - x86_64
       Environment:
         Variables:
-          #SENTINELS7DBCONNECTIONSTRING: !Sub "${SENTINELS7DBCONNECTIONSTRING}"
+          SENTINELS7DBCONNECTIONSTRING: !Sub "${SENTINELS7DBCONNECTIONSTRING}"
 
           # Use these creds when developing locally
-          SENTINELS7DBCONNECTIONSTRING: postgres://tsdbadmin:c2lcstu5e40ne7fe@ssjtxd3mkh.pqhane35a5.tsdb.cloud.timescale.com:30475/tsdb?sslmode=require
+          #SENTINELS7DBCONNECTIONSTRING: postgres://tsdbadmin:c2lcstu5e40ne7fe@ssjtxd3mkh.pqhane35a5.tsdb.cloud.timescale.com:30475/tsdb?sslmode=require
 
 Outputs:
   Sentinels7ExternalIntegrationFunction:
